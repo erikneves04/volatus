@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: volatus_db
+    environment:
+      POSTGRES_USER: Volatus_user
+      POSTGRES_PASSWORD: Volatus_pwd
+      POSTGRES_DB: Volatus
+      PGDATA: /data/postgres
+    volumes:
+      - db_data:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - volatus-network
+    restart: unless-stopped
+
+  api:
+    container_name: volatus_api
+    build: ./backend
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - "ConnectionStrings__DefaultConnection=Host=volatus_db;Port=5432;Database=Volatus;Username=Volatus_user;Password=Volatus_pwd"
+      - "ASPNETCORE_ENVIRONMENT=Development"
+    networks:
+      - volatus-network
+    depends_on:
+      - db
+    restart: on-failure
+
+  web:
+    container_name: volatus_web
+    build: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      - volatus-network
+    depends_on:
+      - api
+
+networks:
+  volatus-network:
+    driver: bridge
+
+volumes:
+  db_data:
