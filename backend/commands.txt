@@ -1,0 +1,50 @@
+########## CRIAÇÃO DO PROJETO ##########
+# Solução Geral
+dotnet new sln -n Volatus
+
+# Criar solução da API
+dotnet new webapi -n Volatus.Api --use-controllers
+dotnet sln add Volatus.Api/Volatus.Api.csproj
+
+# Criar solução biblioteca de classes
+dotnet new classlib -n Volatus.Domain
+dotnet sln add Volatus.Domain/Volatus.Domain.csproj
+
+# Criar solução acesso a dados
+dotnet new classlib -n Volatus.Data
+dotnet sln add Volatus.Data/Volatus.Data.csproj
+
+# Referências entre os projetos
+dotnet add Volatus.Api/Volatus.Api.csproj reference Volatus.Domain/Volatus.Domain.csproj
+dotnet add Volatus.Api/Volatus.Api.csproj reference Volatus.Data/Volatus.Data.csproj
+dotnet add Volatus.Data/Volatus.Data.csproj reference Volatus.Domain/Volatus.Domain.csproj
+
+
+########## DEPENDÊNCIAS ##########
+# Dentro de API
+dotnet add package Newtonsoft.Json
+dotnet add package Microsoft.EntityFrameworkCore.Design
+
+# Dentro de Volatus.Data 
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL.Design
+
+# Dentro de Domain
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package BCrypt.Net-Next
+dotnet add package Microsoft.Extensions.Configuration.Abstractions
+dotnet add package System.IdentityModel.Tokens.Jwt
+dotnet add package Microsoft.AspNetCore.Http.Abstractions
+
+
+########## BANCO DE DADOS ##########
+dotnet tool install --global dotnet-ef
+
+# Criar migration
+dotnet ef migrations add User --project Volatus.Data --startup-project Volatus.Api
+
+# Atualização
+dotnet ef database update --project Volatus.Data --startup-project Volatus.Api
