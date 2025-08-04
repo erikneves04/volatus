@@ -5,14 +5,10 @@ import { CoreService } from 'src/app/services/core.service';
   selector: 'app-branding',
   imports: [],
   template: `
-    <div class="branding d-none d-lg-flex align-items-center">
-      <a href="/" class="d-flex">
-        <img
-          src="./assets/images/logos/light-logo.svg"
-          class="align-middle m-2"
-          alt="logo"
-        />
-      </a>
+    <div class="branding d-flex align-items-center">
+      <p class="mat-h6 m-0" style="color: white; padding-left: 20px;">
+        Volatus Logística
+      </p>
     </div>
   `,
 })

@@ -3,15 +3,10 @@
 html .topbar {
   background-color: var(--mat-sys-primary);
   position: sticky;
-  top: 72px;
   z-index: 9;
   height: $header-height;
   box-shadow: var(--mat-sys-level2);
-
-  @media (max-width: 991px){
-    top: 154px;
-  }
-
+  
   .mat-mdc-icon-button {
     color: $white;
   }
@@ -22,7 +17,7 @@ html .topbar {
 }
 
 .topbar-dd {
-  min-width: 220px !important;
+
 }
 
 .upgrade-bg {
