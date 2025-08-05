@@ -30,11 +30,9 @@ export class DeliveryService {
     const deliveryInsert: DeliveryInsertViewModel = {
       customerName: delivery.customerName || '',
       customerAddress: delivery.customerAddress || '',
-      customerPhone: delivery.customerPhone || '',
       description: delivery.description || '',
       weight: delivery.weight || 0,
       status: delivery.status || 'Pending',
-      scheduledDate: delivery.scheduledDate,
       deliveredDate: delivery.deliveredDate,
       notes: delivery.notes,
       droneId: delivery.droneId
@@ -49,11 +47,9 @@ export class DeliveryService {
     const deliveryUpdate: DeliveryUpdateViewModel = {
       customerName: delivery.customerName || '',
       customerAddress: delivery.customerAddress || '',
-      customerPhone: delivery.customerPhone || '',
       description: delivery.description || '',
       weight: delivery.weight || 0,
       status: delivery.status || 'Pending',
-      scheduledDate: delivery.scheduledDate,
       deliveredDate: delivery.deliveredDate,
       notes: delivery.notes,
       droneId: delivery.droneId
@@ -86,11 +82,9 @@ export class DeliveryService {
       id: deliveryViewModel.id,
       customerName: deliveryViewModel.customerName,
       customerAddress: deliveryViewModel.customerAddress,
-      customerPhone: deliveryViewModel.customerPhone,
       description: deliveryViewModel.description,
       weight: deliveryViewModel.weight,
       status: deliveryViewModel.status,
-      scheduledDate: deliveryViewModel.scheduledDate,
       deliveredDate: deliveryViewModel.deliveredDate,
       notes: deliveryViewModel.notes,
       droneId: deliveryViewModel.droneId,

@@ -61,12 +61,10 @@ export interface EventViewModel {
 export interface DeliveryViewModel {
   id: string;
   customerName: string;
-  customerAddress: string;
-  customerPhone: string;
+  customerAddress: string; // Format: "(x, y)"
   description: string;
   weight: number;
   status: string;
-  scheduledDate?: string;
   deliveredDate?: string;
   notes?: string;
   droneId?: string;
@@ -76,12 +74,10 @@ export interface DeliveryViewModel {
 
 export interface DeliveryInsertViewModel {
   customerName: string;
-  customerAddress: string;
-  customerPhone: string;
+  customerAddress: string; // Format: "(x, y)"
   description: string;
   weight: number;
   status: string;
-  scheduledDate?: string;
   deliveredDate?: string;
   notes?: string;
   droneId?: string;
@@ -89,12 +85,10 @@ export interface DeliveryInsertViewModel {
 
 export interface DeliveryUpdateViewModel {
   customerName: string;
-  customerAddress: string;
-  customerPhone: string;
+  customerAddress: string; // Format: "(x, y)"
   description: string;
   weight: number;
   status: string;
-  scheduledDate?: string;
   deliveredDate?: string;
   notes?: string;
   droneId?: string;

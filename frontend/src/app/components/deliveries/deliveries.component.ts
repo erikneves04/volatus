@@ -28,7 +28,7 @@ import { DeliveryService } from '../../services/delivery.service';
   styleUrl: './deliveries.component.scss'
 })
 export class DeliveriesComponent implements OnInit {
-  displayedColumns1: string[] = ['customerName', 'customerPhone', 'weight', 'status', 'scheduledDate', 'actions'];
+  displayedColumns1: string[] = ['customerName', 'customerAddress', 'weight', 'status', 'actions'];
   dataSource1: Delivery[] = [];
   loading = false;
 
@@ -124,8 +124,7 @@ export class DeliveriesComponent implements OnInit {
     }
   }
 
-  formatDate(dateString?: string): string {
-    if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString('pt-BR');
+  formatAddress(address: string): string {
+    return address || '-';
   }
 }

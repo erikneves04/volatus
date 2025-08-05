@@ -55,11 +55,9 @@ public class DeliveryServices : IDeliveryServices
 
         delivery.CustomerName = model.CustomerName;
         delivery.CustomerAddress = model.CustomerAddress;
-        delivery.CustomerPhone = model.CustomerPhone;
         delivery.Description = model.Description;
         delivery.Weight = model.Weight;
         delivery.Status = model.Status;
-        delivery.ScheduledDate = model.ScheduledDate;
         delivery.DeliveredDate = model.DeliveredDate;
         delivery.Notes = model.Notes;
 
@@ -137,9 +135,6 @@ public class DeliveryServices : IDeliveryServices
         if (string.IsNullOrEmpty(model.CustomerAddress))
             messages.Add("Customer address is required.");
 
-        if (string.IsNullOrEmpty(model.CustomerPhone))
-            messages.Add("Customer phone is required.");
-
         if (string.IsNullOrEmpty(model.Description))
             messages.Add("Description is required.");
 
@@ -155,9 +150,8 @@ public class DeliveryServices : IDeliveryServices
 
     private static Delivery ConvertToEntity(DeliveryInsertViewModel model)
     {
-        return new Delivery(model.CustomerName, model.CustomerAddress, model.CustomerPhone, model.Description, model.Weight, model.Status)
+        return new Delivery(model.CustomerName, model.CustomerAddress, model.Description, model.Weight, model.Status)
         {
-            ScheduledDate = model.ScheduledDate,
             DeliveredDate = model.DeliveredDate,
             Notes = model.Notes,
             DroneId = model.DroneId

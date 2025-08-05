@@ -6,8 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+
 import { MaterialModule } from 'src/app/material.module';
 import { Delivery } from '../../../models/delivery.model';
 
@@ -22,8 +21,6 @@ import { Delivery } from '../../../models/delivery.model';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MaterialModule
   ],
   template: `
@@ -40,18 +37,13 @@ import { Delivery } from '../../../models/delivery.model';
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Endereço do Cliente</mat-label>
-            <textarea matInput formControlName="customerAddress" placeholder="Ex: Rua das Flores, 123 - Centro"></textarea>
+            <mat-label>Posição (x, y)</mat-label>
+            <input matInput formControlName="customerAddress" placeholder="Ex: (15, 20)">
             <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('required')">
-              Endereço é obrigatório
+              Posição é obrigatória
             </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Telefone do Cliente</mat-label>
-            <input matInput formControlName="customerPhone" placeholder="Ex: (11) 99999-9999">
-            <mat-error *ngIf="deliveryForm.get('customerPhone')?.hasError('required')">
-              Telefone é obrigatório
+            <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('pattern')">
+              Formato inválido. Use (x, y)
             </mat-error>
           </mat-form-field>
 
@@ -87,12 +79,7 @@ import { Delivery } from '../../../models/delivery.model';
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Data Agendada</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="scheduledDate" placeholder="Ex: 01/01/2024">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
+
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Observações</mat-label>
@@ -139,12 +126,10 @@ export class DeliveryFormDialogComponent implements OnInit {
   private initForm(): void {
     this.deliveryForm = this.fb.group({
       customerName: [this.data?.customerName || '', [Validators.required]],
-      customerAddress: [this.data?.customerAddress || '', [Validators.required]],
-      customerPhone: [this.data?.customerPhone || '', [Validators.required]],
+      customerAddress: [this.data?.customerAddress || '', [Validators.required, Validators.pattern(/^\(-?\d+,\s*-?\d+\)$/)]],
       description: [this.data?.description || '', [Validators.required]],
       weight: [this.data?.weight || null, [Validators.required, Validators.min(0.1)]],
       status: [this.data?.status || 'Pending', [Validators.required]],
-      scheduledDate: [this.data?.scheduledDate ? new Date(this.data.scheduledDate) : null],
       deliveredDate: [this.data?.deliveredDate ? new Date(this.data.deliveredDate) : null],
       notes: [this.data?.notes || '']
     });
@@ -154,10 +139,7 @@ export class DeliveryFormDialogComponent implements OnInit {
     if (this.deliveryForm && this.deliveryForm.valid) {
       const formValue = this.deliveryForm.value;
       
-      // Converter datas para string ISO se existirem
-      if (formValue.scheduledDate) {
-        formValue.scheduledDate = formValue.scheduledDate.toISOString();
-      }
+      // Converter data para string ISO se existir
       if (formValue.deliveredDate) {
         formValue.deliveredDate = formValue.deliveredDate.toISOString();
       }

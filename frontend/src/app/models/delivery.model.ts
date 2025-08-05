@@ -1,12 +1,10 @@
 export interface Delivery {
   id: string;
   customerName: string;
-  customerAddress: string;
-  customerPhone: string;
+  customerAddress: string; // Format: "(x, y)"
   description: string;
   weight: number;
   status: string;
-  scheduledDate?: string;
   deliveredDate?: string;
   notes?: string;
   droneId?: string;
