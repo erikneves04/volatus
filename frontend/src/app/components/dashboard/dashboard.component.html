@@ -1,0 +1,173 @@
+<div class="dashboard-container">
+  <!-- Header do Dashboard -->
+  <div class="dashboard-header">
+    <mat-card class="header-card">
+      <mat-card-content>
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Dashboard de Entregas</h2>
+          <div class="header-actions">
+            <button 
+              mat-raised-button 
+              color="primary"
+              (click)="refreshData()"
+            >
+              <mat-icon>refresh</mat-icon>
+              Atualizar Dados
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Métricas principais -->
+  <div class="metrics-grid">
+    <mat-card class="metric-card">
+      <mat-card-content>
+        <div class="metric-item">
+          <div class="metric-icon">
+            <mat-icon>local_shipping</mat-icon>
+          </div>
+          <div class="metric-content">
+            <h3>{{ metrics.totalDeliveries }}</h3>
+            <p>Total de Entregas</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <mat-card-content>
+        <div class="metric-item">
+          <div class="metric-icon success">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="metric-content">
+            <h3>{{ metrics.completedDeliveries }}</h3>
+            <p>Entregas Concluídas</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <mat-card-content>
+        <div class="metric-item">
+          <div class="metric-icon warning">
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="metric-content">
+            <h3>{{ formatTime(metrics.averageDeliveryTime) }}</h3>
+            <p>Tempo Médio por Entrega</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="metric-card">
+      <mat-card-content>
+        <div class="metric-item">
+          <div class="metric-icon info">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+          <div class="metric-content">
+            <h3>{{ metrics.deliverySuccessRate.toFixed(1) }}%</h3>
+            <p>Taxa de Sucesso</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Conteúdo principal -->
+  <div class="main-content">
+    <!-- Status dos Drones -->
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <mat-card-title>Status dos Drones</mat-card-title>
+        <mat-card-subtitle>Informações em tempo real dos drones</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="drone-list" *ngIf="drones.length > 0; else noDrones">
+          <div class="drone-item" *ngFor="let drone of drones">
+            <div class="drone-info">
+              <h4>{{ drone.name }}</h4>
+              <p>Posição: ({{ drone.currentPosition.x.toFixed(1) }}, {{ drone.currentPosition.y.toFixed(1) }})</p>
+              <p>Entregas: {{ drone.totalDeliveries }} | Distância: {{ drone.totalDistance.toFixed(1) }}km</p>
+            </div>
+            <div class="drone-status">
+              <mat-chip [color]="getStatusColor(drone.status)" selected>
+                {{ getStatusLabel(drone.status) }}
+              </mat-chip>
+              <mat-progress-bar 
+                mode="determinate" 
+                [value]="drone.battery"
+                [color]="drone.battery < 20 ? 'warn' : 'primary'"
+              ></mat-progress-bar>
+              <span class="battery-text">{{ drone.battery }}%</span>
+            </div>
+          </div>
+        </div>
+        <ng-template #noDrones>
+          <div class="empty-state">
+            <mat-icon>drone</mat-icon>
+            <p>Nenhum drone disponível no momento</p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Entregas Recentes -->
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <mat-card-title>Entregas Recentes</mat-card-title>
+        <mat-card-subtitle>Últimas entregas realizadas</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="deliveries-list" *ngIf="recentDeliveries.length > 0; else noDeliveries">
+          <div class="delivery-item" *ngFor="let delivery of recentDeliveries">
+            <div class="delivery-info">
+              <h4>Entrega #{{ delivery.id }}</h4>
+              <p>De: ({{ delivery.origin.x.toFixed(1) }}, {{ delivery.origin.y.toFixed(1) }})</p>
+              <p>Para: ({{ delivery.destination.x.toFixed(1) }}, {{ delivery.destination.y.toFixed(1) }})</p>
+            </div>
+            <div class="delivery-status">
+              <mat-chip [color]="getDeliveryStatusColor(delivery.status)" selected>
+                {{ getDeliveryStatusLabel(delivery.status) }}
+              </mat-chip>
+              <span class="delivery-time">{{ formatTime(delivery.deliveryTime) }}</span>
+            </div>
+          </div>
+        </div>
+        <ng-template #noDeliveries>
+          <div class="empty-state">
+            <mat-icon>local_shipping</mat-icon>
+            <p>Nenhuma entrega realizada ainda</p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Log de Eventos -->
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <mat-card-title>Log de Eventos</mat-card-title>
+        <mat-card-subtitle>Histórico de atividades do sistema</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="events-log" *ngIf="events.length > 0; else noEvents">
+          <div class="event-item" *ngFor="let event of events.slice(0, 10)">
+            <div class="event-time">{{ formatEventTime(event.timestamp) }}</div>
+            <div class="event-description">{{ event.description }}</div>
+          </div>
+        </div>
+        <ng-template #noEvents>
+          <div class="empty-state">
+            <mat-icon>event_note</mat-icon>
+            <p>Nenhum evento registrado</p>
+          </div>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
