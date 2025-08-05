@@ -38,9 +38,11 @@ services.AddScoped<IPasswordServices, PasswordServices>();
 // Add HttpContextAccessor
 services.AddHttpContextAccessor();
 
-
 services.AddControllers();
-services.AddOpenApi();
+
+// Configure Swagger/OpenAPI
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -48,10 +50,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-Console.WriteLine("Environment: ");
+Console.WriteLine("Environment: " + environment.EnvironmentName);
+
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     // Migrating database
     Console.WriteLine("Migrating database...");
@@ -62,7 +67,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapGet("/", () =>
 {
-    return Results.Ok();
+    return Results.Ok("Volatus API is running!");
 });
 
 app.UseHttpsRedirection();
