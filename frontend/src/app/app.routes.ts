@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
+import { DeliveriesComponent } from './components/deliveries/deliveries.component';
+import { DronesComponent } from './components/drones/drones.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +18,14 @@ export const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./pages/pages.routes').then((m) => m.PagesRoutes),
+      },
+      {
+        path: 'deliveries',
+        component: DeliveriesComponent
+      },
+      {
+        path: 'drones',
+        component: DronesComponent
       },
       {
         path: 'ui-components',
