@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { Drone } from '../models/drone.model';
 
 function getApiUrl() {
-  // Em produção, o backend pode injetar window['API_URL'] via script
-  // Em dev, usa proxy /api
-  return (window as any)['API_URL'] ? `${(window as any)['API_URL']}/drone` : '/api/drone';
+  return 'http://localhost:8081/api/drone';
 }
 
 @Injectable({ providedIn: 'root' })
