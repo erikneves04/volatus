@@ -1,21 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MaterialModule } from 'src/app/material.module';
-
-export interface Delivery {
-  id: string;
-  name: string;
-  weight: number;
-  position: string;
-  priority: 'high' | 'medium' | 'low';
-  status: 'delivered' | 'inProgress' | 'waiting' | 'cancelled';
-}
+import { Delivery } from '../../../models/delivery.model';
 
 @Component({
   selector: 'app-delivery-form-dialog',
@@ -28,6 +22,8 @@ export interface Delivery {
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MaterialModule
   ],
   template: `
@@ -36,10 +32,34 @@ export interface Delivery {
       <mat-dialog-content>
         <div class="form-container">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nome do Cliente/Pedido</mat-label>
-            <input matInput formControlName="name" placeholder="Ex: Eletrônicos Express">
-            <mat-error *ngIf="deliveryForm.get('name')?.hasError('required')">
-              Nome é obrigatório
+            <mat-label>Nome do Cliente</mat-label>
+            <input matInput formControlName="customerName" placeholder="Ex: João Silva">
+            <mat-error *ngIf="deliveryForm.get('customerName')?.hasError('required')">
+              Nome do cliente é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Endereço do Cliente</mat-label>
+            <textarea matInput formControlName="customerAddress" placeholder="Ex: Rua das Flores, 123 - Centro"></textarea>
+            <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('required')">
+              Endereço é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefone do Cliente</mat-label>
+            <input matInput formControlName="customerPhone" placeholder="Ex: (11) 99999-9999">
+            <mat-error *ngIf="deliveryForm.get('customerPhone')?.hasError('required')">
+              Telefone é obrigatório
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descrição da Entrega</mat-label>
+            <textarea matInput formControlName="description" placeholder="Ex: Entrega de eletrônicos"></textarea>
+            <mat-error *ngIf="deliveryForm.get('description')?.hasError('required')">
+              Descrição é obrigatória
             </mat-error>
           </mat-form-field>
 
@@ -55,39 +75,28 @@ export interface Delivery {
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Posição (x, y)</mat-label>
-            <input matInput formControlName="position" placeholder="Ex: (15, 20)">
-            <mat-error *ngIf="deliveryForm.get('position')?.hasError('required')">
-              Posição é obrigatória
-            </mat-error>
-            <mat-error *ngIf="deliveryForm.get('position')?.hasError('pattern')">
-              Formato inválido. Use (x, y)
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Prioridade</mat-label>
-            <mat-select formControlName="priority">
-              <mat-option value="low">Baixa</mat-option>
-              <mat-option value="medium">Média</mat-option>
-              <mat-option value="high">Alta</mat-option>
-            </mat-select>
-            <mat-error *ngIf="deliveryForm.get('priority')?.hasError('required')">
-              Prioridade é obrigatória
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="waiting">Aguardando</mat-option>
-              <mat-option value="inProgress">Em Progresso</mat-option>
-              <mat-option value="delivered">Entregue</mat-option>
-              <mat-option value="cancelled">Cancelado</mat-option>
+              <mat-option value="Pending">Pendente</mat-option>
+              <mat-option value="InProgress">Em Andamento</mat-option>
+              <mat-option value="Delivered">Entregue</mat-option>
+              <mat-option value="Cancelled">Cancelada</mat-option>
             </mat-select>
             <mat-error *ngIf="deliveryForm.get('status')?.hasError('required')">
               Status é obrigatório
             </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Data Agendada</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="scheduledDate" placeholder="Ex: 01/01/2024">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Observações</mat-label>
+            <textarea matInput formControlName="notes" placeholder="Observações adicionais"></textarea>
           </mat-form-field>
         </div>
       </mat-dialog-content>
@@ -104,15 +113,15 @@ export interface Delivery {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      min-width: 400px;
+      min-width: 500px;
     }
     .full-width {
       width: 100%;
     }
   `]
 })
-export class DeliveryFormDialogComponent {
-  deliveryForm: FormGroup;
+export class DeliveryFormDialogComponent implements OnInit {
+  deliveryForm!: FormGroup;
   isEditMode: boolean = false;
 
   constructor(
@@ -121,24 +130,41 @@ export class DeliveryFormDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: Delivery | null
   ) {
     this.isEditMode = !!data;
+  }
+
+  ngOnInit(): void {
     this.initForm();
   }
 
   private initForm(): void {
     this.deliveryForm = this.fb.group({
-      name: [this.data?.name || '', [Validators.required]],
-      weight: [this.data?.weight || '', [Validators.required, Validators.min(0.1)]],
-      position: [this.data?.position || '', [Validators.required, Validators.pattern(/^\(-?\d+,\s*-?\d+\)$/)]],
-      priority: [this.data?.priority || 'medium', [Validators.required]],
-      status: [this.data?.status || 'waiting', [Validators.required]]
+      customerName: [this.data?.customerName || '', [Validators.required]],
+      customerAddress: [this.data?.customerAddress || '', [Validators.required]],
+      customerPhone: [this.data?.customerPhone || '', [Validators.required]],
+      description: [this.data?.description || '', [Validators.required]],
+      weight: [this.data?.weight || null, [Validators.required, Validators.min(0.1)]],
+      status: [this.data?.status || 'Pending', [Validators.required]],
+      scheduledDate: [this.data?.scheduledDate ? new Date(this.data.scheduledDate) : null],
+      deliveredDate: [this.data?.deliveredDate ? new Date(this.data.deliveredDate) : null],
+      notes: [this.data?.notes || '']
     });
   }
 
   onSubmit(): void {
-    if (this.deliveryForm.valid) {
-      const deliveryData: Delivery = {
-        id: this.data?.id || this.generateId(),
-        ...this.deliveryForm.value
+    if (this.deliveryForm && this.deliveryForm.valid) {
+      const formValue = this.deliveryForm.value;
+      
+      // Converter datas para string ISO se existirem
+      if (formValue.scheduledDate) {
+        formValue.scheduledDate = formValue.scheduledDate.toISOString();
+      }
+      if (formValue.deliveredDate) {
+        formValue.deliveredDate = formValue.deliveredDate.toISOString();
+      }
+
+      const deliveryData: Partial<Delivery> = {
+        ...this.data,
+        ...formValue
       };
       this.dialogRef.close(deliveryData);
     }
@@ -146,9 +172,5 @@ export class DeliveryFormDialogComponent {
 
   onCancel(): void {
     this.dialogRef.close();
-  }
-
-  private generateId(): string {
-    return 'PED-' + Math.random().toString(36).substr(2, 9).toUpperCase();
   }
 } 

@@ -56,4 +56,51 @@ export interface EventViewModel {
   title: string;
   description: string;
   createdAt: string;
+}
+
+export interface DeliveryViewModel {
+  id: string;
+  customerName: string;
+  customerAddress: string;
+  customerPhone: string;
+  description: string;
+  weight: number;
+  status: string;
+  scheduledDate?: string;
+  deliveredDate?: string;
+  notes?: string;
+  droneId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DeliveryInsertViewModel {
+  customerName: string;
+  customerAddress: string;
+  customerPhone: string;
+  description: string;
+  weight: number;
+  status: string;
+  scheduledDate?: string;
+  deliveredDate?: string;
+  notes?: string;
+  droneId?: string;
+}
+
+export interface DeliveryUpdateViewModel {
+  customerName: string;
+  customerAddress: string;
+  customerPhone: string;
+  description: string;
+  weight: number;
+  status: string;
+  scheduledDate?: string;
+  deliveredDate?: string;
+  notes?: string;
+  droneId?: string;
+}
+
+export interface DeliveryAssignmentViewModel {
+  deliveryId: string;
+  droneId: string;
 } 

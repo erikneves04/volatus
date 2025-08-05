@@ -28,11 +28,13 @@ services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 services.AddScoped<IPermissionRepository, PermissionRepository>();
 services.AddScoped<IDroneRepository, DroneRepository>();
 services.AddScoped<IEventRepository, EventRepository>();
+services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 
 services.AddScoped<IUserServices, UserServices>();
 services.AddScoped<IPermissionServices, PermissionServices>();
 services.AddScoped<IDroneServices, DroneServices>();
 services.AddScoped<IEventServices, EventServices>();
+services.AddScoped<IDeliveryServices, DeliveryServices>();
 services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 services.AddScoped<ISessionServices, SessionServices>();
 services.AddScoped<IPasswordServices, PasswordServices>();
