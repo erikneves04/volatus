@@ -33,6 +33,7 @@ export class DeliveryService {
       description: delivery.description || '',
       weight: delivery.weight || 0,
       status: delivery.status || 'Pending',
+      priority: delivery.priority || 'Medium',
       deliveredDate: delivery.deliveredDate,
       notes: delivery.notes,
       droneId: delivery.droneId
@@ -50,6 +51,7 @@ export class DeliveryService {
       description: delivery.description || '',
       weight: delivery.weight || 0,
       status: delivery.status || 'Pending',
+      priority: delivery.priority || 'Medium',
       deliveredDate: delivery.deliveredDate,
       notes: delivery.notes,
       droneId: delivery.droneId
@@ -85,6 +87,7 @@ export class DeliveryService {
       description: deliveryViewModel.description,
       weight: deliveryViewModel.weight,
       status: deliveryViewModel.status,
+      priority: deliveryViewModel.priority,
       deliveredDate: deliveryViewModel.deliveredDate,
       notes: deliveryViewModel.notes,
       droneId: deliveryViewModel.droneId,

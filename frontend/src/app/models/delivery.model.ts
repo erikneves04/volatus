@@ -5,6 +5,7 @@ export interface Delivery {
   description: string;
   weight: number;
   status: string;
+  priority: string; // Low, Medium, High
   deliveredDate?: string;
   notes?: string;
   droneId?: string;

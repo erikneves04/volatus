@@ -58,6 +58,7 @@ public class DeliveryServices : IDeliveryServices
         delivery.Description = model.Description;
         delivery.Weight = model.Weight;
         delivery.Status = model.Status;
+        delivery.Priority = model.Priority;
         delivery.DeliveredDate = model.DeliveredDate;
         delivery.Notes = model.Notes;
 
@@ -144,13 +145,16 @@ public class DeliveryServices : IDeliveryServices
         if (string.IsNullOrEmpty(model.Status))
             messages.Add("Status is required.");
 
+        if (string.IsNullOrEmpty(model.Priority))
+            messages.Add("Priority is required.");
+
         if (messages.Any())
             throw new BadRequestException(string.Join(" ", messages));
     }
 
     private static Delivery ConvertToEntity(DeliveryInsertViewModel model)
     {
-        return new Delivery(model.CustomerName, model.CustomerAddress, model.Description, model.Weight, model.Status)
+        return new Delivery(model.CustomerName, model.CustomerAddress, model.Description, model.Weight, model.Status, model.Priority)
         {
             DeliveredDate = model.DeliveredDate,
             Notes = model.Notes,

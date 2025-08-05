@@ -7,13 +7,14 @@ public class Delivery : Entity
 {
     public Delivery() { }
     
-    public Delivery(string customerName, string customerAddress, string description, double weight, string status)
+    public Delivery(string customerName, string customerAddress, string description, double weight, string status, string priority)
     {
         CustomerName = customerName;
         CustomerAddress = customerAddress;
         Description = description;
         Weight = weight;
         Status = status;
+        Priority = priority;
     }
 
     public string CustomerName { get; set; }
@@ -21,6 +22,7 @@ public class Delivery : Entity
     public string Description { get; set; }
     public double Weight { get; set; } // in kg
     public string Status { get; set; } // Pending, InProgress, Delivered, Cancelled
+    public string Priority { get; set; } // Low, Medium, High
     public DateTime? DeliveredDate { get; set; }
     public string? Notes { get; set; }
     public Guid? DroneId { get; set; } // Optional drone assignment
@@ -38,6 +40,7 @@ public class DeliveryConfiguration : IEntityTypeConfiguration<Delivery>
         builder.Property(delivery => delivery.Description).HasMaxLength(500).IsRequired();
         builder.Property(delivery => delivery.Weight).IsRequired();
         builder.Property(delivery => delivery.Status).HasMaxLength(50).IsRequired();
+        builder.Property(delivery => delivery.Priority).HasMaxLength(20).IsRequired();
         builder.Property(delivery => delivery.DeliveredDate);
         builder.Property(delivery => delivery.Notes).HasMaxLength(500);
         builder.Property(delivery => delivery.DroneId);

@@ -28,7 +28,7 @@ import { DeliveryService } from '../../services/delivery.service';
   styleUrl: './deliveries.component.scss'
 })
 export class DeliveriesComponent implements OnInit {
-  displayedColumns1: string[] = ['customerName', 'customerAddress', 'weight', 'status', 'actions'];
+  displayedColumns1: string[] = ['customerName', 'customerAddress', 'weight', 'priority', 'status', 'actions'];
   dataSource1: Delivery[] = [];
   loading = false;
 
@@ -126,5 +126,31 @@ export class DeliveriesComponent implements OnInit {
 
   formatAddress(address: string): string {
     return address || '-';
+  }
+
+  getPriorityColor(priority: string): string {
+    switch (priority) {
+      case 'High':
+        return 'bg-light-error text-error';
+      case 'Medium':
+        return 'bg-light-warning text-warning';
+      case 'Low':
+        return 'bg-light-success text-success';
+      default:
+        return 'bg-light-secondary text-secondary';
+    }
+  }
+
+  getPriorityText(priority: string): string {
+    switch (priority) {
+      case 'High':
+        return 'Alta';
+      case 'Medium':
+        return 'Média';
+      case 'Low':
+        return 'Baixa';
+      default:
+        return priority;
+    }
   }
 }
