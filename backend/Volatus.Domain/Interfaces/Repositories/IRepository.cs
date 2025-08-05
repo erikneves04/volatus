@@ -10,8 +10,8 @@ public interface IRepository<Entity> where Entity : IEntity
     List<Entity> Get(Expression<Func<Entity, bool>> linq = null);
     Entity GetById(Guid? id);
     IQueryable<Entity> Query();
-    List<Entity> ExecuteQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, object>> orderBy = null);
-    List<EntityViewModel> ExecuteQuery<EntityViewModel>(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, EntityViewModel>> converter, Expression<Func<Entity, object>> orderBy = null);
+    List<Entity> ExecuteQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, IComparable>> orderBy = null);
+    List<EntityViewModel> ExecuteQuery<EntityViewModel>(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, EntityViewModel>> converter, Expression<Func<Entity, IComparable>> orderBy = null);
 
     Entity Insert(Entity entity);
     List<Entity> InsertMany(List<Entity> entities);

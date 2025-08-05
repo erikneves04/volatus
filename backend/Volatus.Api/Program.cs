@@ -53,17 +53,14 @@ var app = builder.Build();
 Console.WriteLine("Environment: " + environment.EnvironmentName);
 
 // Configure the HTTP request pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-    // Migrating database
-    Console.WriteLine("Migrating database...");
-    using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
-    Console.WriteLine("Database migrated successfully");
-}
+// Migrating database
+Console.WriteLine("Migrating database...");
+using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+Console.WriteLine("Database migrated successfully");
 
 app.MapGet("/", () =>
 {

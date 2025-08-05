@@ -17,10 +17,8 @@ public class DroneServices : IDroneServices
 
     public IEnumerable<DroneViewModel> View(PaginationParams @params)
     {
-        return _repository
-                .ExecuteQuery(_repository.Query(), @params)
-                .Select(ConvertToViewModel)
-                .ToList();
+        var drones = _repository.ExecuteQuery(_repository.Query(), @params);
+        return drones.Select(drone => ConvertToViewModel(drone)).ToList();
     }
 
     public DroneViewModel View(Guid id)

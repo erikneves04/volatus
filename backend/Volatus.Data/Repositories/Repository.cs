@@ -84,15 +84,19 @@ public class Repository<Entity> : IRepository<Entity>
         return _table.AsNoTracking().AsQueryable();
     }
     
-    private static IQueryable<Entity> PaginateQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, object>> orderBy = null)
+    private static IQueryable<Entity> PaginateQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, IComparable>> orderBy = null)
     {
+        // Apply ordering first if orderBy is not null
+        if (orderBy != null)
+        {
+            if (@params.SortDirection == "desc")
+                query = query.OrderByDescending(orderBy);
+            else
+                query = query.OrderBy(orderBy);
+        }
+
         var entities = query.Skip((@params.PageNumber - 1) * @params.PageSize).Take(@params.PageSize);
         @params.Count = entities.Count();
-
-        if (@params.SortColumn == "desc")
-            entities = entities.OrderByDescending(orderBy);
-        else
-            entities = entities.OrderBy(orderBy);
 
         if ((@params.Count != @params.PageSize) || query.Count() <= (@params.PageSize * @params.PageNumber))
             @params.isLastPage = true;
@@ -100,13 +104,13 @@ public class Repository<Entity> : IRepository<Entity>
         return entities;
     }
 
-    public virtual List<Entity> ExecuteQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, object>> orderBy = null)
+    public virtual List<Entity> ExecuteQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, IComparable>> orderBy = null)
     {
         return PaginateQuery(query, @params, orderBy)
                 .ToList();
     }
 
-    public virtual List<EntityViewModel> ExecuteQuery<EntityViewModel>(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, EntityViewModel>> converter, Expression<Func<Entity, object>> orderBy = null)
+    public virtual List<EntityViewModel> ExecuteQuery<EntityViewModel>(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, EntityViewModel>> converter, Expression<Func<Entity, IComparable>> orderBy = null)
     {
         return PaginateQuery(query, @params, orderBy)
                 .Select(converter)

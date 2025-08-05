@@ -45,10 +45,11 @@ public class ErrorMiddleware
         else
         {
             // Used for unknown exceptions
-            var message = new List<string>() { "Internal Server Erro." };
+            var message = new List<string>() { "Internal Server Error." };
             errorResponseVm = new Error(StatusCodeEnums.InternalServerError, message);
             context.Response.StatusCode = (int)StatusCodeEnums.InternalServerError;
 
+            // Don't re-throw the exception, just log it
             // TODO: Save log to fix
         }
 
