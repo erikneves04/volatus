@@ -7,6 +7,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MaterialModule } from 'src/app/material.module';
+import { EventService } from '../../services/event.service';
+import { Event } from '../../models/event.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,7 +30,7 @@ export class DashboardComponent implements OnInit {
   // Dados que virão do backend
   drones: any[] = [];
   recentDeliveries: any[] = [];
-  events: any[] = [];
+  events: Event[] = [];
   metrics: any = {
     totalDeliveries: 0,
     completedDeliveries: 0,
@@ -36,7 +38,7 @@ export class DashboardComponent implements OnInit {
     deliverySuccessRate: 0
   };
 
-  constructor() {}
+  constructor(private eventService: EventService) {}
 
   ngOnInit(): void {
     // Aqui será feita a conexão com o backend
@@ -47,7 +49,7 @@ export class DashboardComponent implements OnInit {
     // TODO: Implementar chamadas para o backend
     // this.dashboardService.getDrones().subscribe(drones => this.drones = drones);
     // this.dashboardService.getDeliveries().subscribe(deliveries => this.recentDeliveries = deliveries);
-    // this.dashboardService.getEvents().subscribe(events => this.events = events);
+    this.eventService.getRecentEvents(10).subscribe(events => this.events = events);
     // this.dashboardService.getMetrics().subscribe(metrics => this.metrics = metrics);
   }
 
@@ -67,8 +69,8 @@ export class DashboardComponent implements OnInit {
     return `${seconds}s`;
   }
 
-  formatEventTime(timestamp: Date): string {
-    return timestamp.toLocaleTimeString();
+  formatEventTime(timestamp: string): string {
+    return new Date(timestamp).toLocaleTimeString();
   }
 
   getStatusColor(status: string): string {

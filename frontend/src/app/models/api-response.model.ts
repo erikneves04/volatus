@@ -49,4 +49,11 @@ export interface DroneUpdateViewModel {
   batteryCapacity: number;
   currentBattery: number;
   notes?: string;
+}
+
+export interface EventViewModel {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
 } 

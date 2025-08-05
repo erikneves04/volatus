@@ -9,10 +9,12 @@ namespace Volatus.Domain.Services;
 public class DroneServices : IDroneServices
 {
     private readonly IDroneRepository _repository;
+    private readonly IEventServices _eventServices;
 
-    public DroneServices(IDroneRepository repository)
+    public DroneServices(IDroneRepository repository, IEventServices eventServices)
     {
         _repository = repository;
+        _eventServices = eventServices;
     }
 
     public IEnumerable<DroneViewModel> View(PaginationParams @params)
@@ -40,6 +42,9 @@ public class DroneServices : IDroneServices
         var drone = ConvertToEntity(model);
         _repository.Insert(drone);
 
+        // Criar evento
+        _eventServices.CreateEvent("Novo Drone Cadastrado", $"Drone '{drone.Name}' (S/N: {drone.SerialNumber}) foi cadastrado no sistema.");
+
         return ConvertToViewModel(Get(drone.Id));
     }
 
@@ -64,6 +69,9 @@ public class DroneServices : IDroneServices
 
         _repository.Update(drone);
 
+        // Criar evento
+        _eventServices.CreateEvent("Drone Atualizado", $"Drone '{drone.Name}' (S/N: {drone.SerialNumber}) foi atualizado no sistema.");
+
         return ConvertToViewModel(Get(drone.Id));
     }
 
@@ -71,6 +79,9 @@ public class DroneServices : IDroneServices
     {
         var drone = Get(id);
         ThrowIfNull(drone, "Drone");
+
+        // Criar evento antes de deletar
+        _eventServices.CreateEvent("Drone Removido", $"Drone '{drone.Name}' (S/N: {drone.SerialNumber}) foi removido do sistema.");
 
         _repository.Delete(drone);
     }
