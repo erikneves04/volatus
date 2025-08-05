@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Volatus.Api.Middleware;
+using Volatus.Api.Services;
 using Volatus.Data.Context;
 using Volatus.Data.Repositories;
 using Volatus.Domain.Interfaces.Repositories;
@@ -38,6 +39,10 @@ services.AddScoped<IDeliveryServices, DeliveryServices>();
 services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 services.AddScoped<ISessionServices, SessionServices>();
 services.AddScoped<IPasswordServices, PasswordServices>();
+
+// Worker services
+services.AddScoped<IDeliveryWorkerService, DeliveryWorkerService>();
+services.AddHostedService<DeliveryBackgroundService>();
 
 // Add HttpContextAccessor
 services.AddHttpContextAccessor();

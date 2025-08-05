@@ -15,6 +15,13 @@ public class Drone : Entity
         Status = status;
         MaxWeight = maxWeight;
         BatteryCapacity = batteryCapacity;
+        CurrentBattery = 100.0; // Start with full battery
+        CurrentX = 0; // Start at base
+        CurrentY = 0;
+        TargetX = 0;
+        TargetY = 0;
+        Speed = 1.0; // units per time interval
+        IsCharging = false;
     }
 
     public string Name { get; set; }
@@ -25,6 +32,15 @@ public class Drone : Entity
     public double BatteryCapacity { get; set; } // in minutes
     public double CurrentBattery { get; set; } // in percentage
     public string? Notes { get; set; }
+    
+    // Position and movement properties
+    public double CurrentX { get; set; } // Current X position
+    public double CurrentY { get; set; } // Current Y position
+    public double TargetX { get; set; } // Target X position
+    public double TargetY { get; set; } // Target Y position
+    public double Speed { get; set; } // units per time interval
+    public bool IsCharging { get; set; } // Whether drone is charging at base
+    public DateTime? LastMovementTime { get; set; } // Last time position was updated
 }
 
 public class DroneConfiguration : IEntityTypeConfiguration<Drone>
@@ -41,6 +57,15 @@ public class DroneConfiguration : IEntityTypeConfiguration<Drone>
         builder.Property(drone => drone.BatteryCapacity).IsRequired();
         builder.Property(drone => drone.CurrentBattery).IsRequired();
         builder.Property(drone => drone.Notes).HasMaxLength(500);
+        
+        // Position and movement properties
+        builder.Property(drone => drone.CurrentX).IsRequired();
+        builder.Property(drone => drone.CurrentY).IsRequired();
+        builder.Property(drone => drone.TargetX).IsRequired();
+        builder.Property(drone => drone.TargetY).IsRequired();
+        builder.Property(drone => drone.Speed).IsRequired();
+        builder.Property(drone => drone.IsCharging).IsRequired();
+        builder.Property(drone => drone.LastMovementTime);
 
         // Unique constraint for serial number
         builder.HasIndex(drone => drone.SerialNumber).IsUnique();
