@@ -23,6 +23,7 @@ public class AppDbContext : DbContext
     public DbSet<UserPermission> UserPermissions { get; set; }
     public DbSet<Drone> Drones { get; set; }
     public DbSet<Event> Events { get; set; }
+    public DbSet<Delivery> Deliveries { get; set; }
 
     public override int SaveChanges()
     {

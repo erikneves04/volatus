@@ -9,124 +9,115 @@
     </div>
 
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource1" class="w-100">
-        <!-- Position Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
-            Nome
-          </th>
-          <td mat-cell *matCellDef="let element" class="p-l-0">
-            <div class="d-flex align-items-center">
-              <div class="m-l-16">
-                <h6 class="f-s-14 f-w-600">
-                  {{ element.name }}
-                </h6>
+      @if(loading) {
+        <div class="d-flex justify-content-center p-4">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      } @else if(dataSource1.length > 0) {
+        <table mat-table [dataSource]="dataSource1" class="w-100">
+          <!-- Cliente Column -->
+          <ng-container matColumnDef="customerName">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
+              Cliente
+            </th>
+            <td mat-cell *matCellDef="let element" class="p-l-0">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <h6 class="f-s-14 f-w-600">
+                    {{ element.customerName }}
+                  </h6>
+                  <small class="text-muted">{{ element.description }}</small>
+                </div>
               </div>
-            </div>
-          </td>
-        </ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
-            Peso
-          </th>
-          <td mat-cell *matCellDef="let element" class="p-l-0">
-            <div class="d-flex align-items-center">
-              <div class="m-l-16">
-                <h6 class="f-s-14 f-w-600">
-                  {{ element.weight }}
-                </h6>
+          <!-- Endereço Column -->
+          <ng-container matColumnDef="customerAddress">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
+              Posição
+            </th>
+            <td mat-cell *matCellDef="let element" class="p-l-0">
+              <div class="d-flex align-items-center">
+                <div class="m-l-16">
+                  <h6 class="f-s-14 f-w-600">
+                    {{ formatAddress(element.customerAddress) }}
+                  </h6>
+                </div>
               </div>
-            </div>
-          </td>
-        </ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
-            Posição (x,y)
-          </th>
-          <td mat-cell *matCellDef="let element" class="p-l-0">
-            <div class="d-flex align-items-center">
-              <div class="m-l-16">
-                <h6 class="f-s-14 f-w-600">
-                  {{ element.position }}
-                </h6>
-              </div>
-            </div>
-          </td>
-        </ng-container>
+                     <!-- Peso Column -->
+           <ng-container matColumnDef="weight">
+             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14 p-l-0">
+               Peso (kg)
+             </th>
+             <td mat-cell *matCellDef="let element" class="p-l-0">
+               <div class="d-flex align-items-center">
+                 <div class="m-l-16">
+                   <h6 class="f-s-14 f-w-600">
+                     {{ element.weight }}
+                   </h6>
+                 </div>
+               </div>
+             </td>
+           </ng-container>
 
-        <!-- Weight Column -->
-        <ng-container matColumnDef="priority">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-            Prioridade
-          </th>
-          <td mat-cell *matCellDef="let element">
-            @if(element.priority == 'medium') {
-            <span class="bg-light-warning text-warning rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            } @if(element.priority == 'high') {
-            <span class="bg-light-error text-error rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            } @if(element.priority == 'low') {
-            <span class="bg-light-success text-success rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.priority | titlecase }}
-            </span>
-            }
-          </td>
-        </ng-container>
-        
-        <!-- Weight Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
-            Status
-          </th>
-          <td mat-cell *matCellDef="let element">
-            @if(element.status == 'waiting') {
-            <span class="bg-light-warning text-warning rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.status | titlecase }}
-            </span>
-            } @if(element.status == 'inProgress') {
-            <span class="bg-light-warning text-warning rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.status | titlecase }}
-            </span>
-            } @if(element.status == 'cancelled') {
-            <span class="bg-light-error text-error rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.status | titlecase }}
-            </span>
-            } @if(element.status == 'delivered') {
-            <span class="bg-light-success text-success rounded f-w-600 p-6 p-y-4 f-s-12">
-              {{ element.status | titlecase }}
-            </span>
-            }
-          </td>
-        </ng-container>
+           <!-- Prioridade Column -->
+           <ng-container matColumnDef="priority">
+             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+               Prioridade
+             </th>
+             <td mat-cell *matCellDef="let element">
+               <span class="rounded f-w-600 p-6 p-y-4 f-s-12" [class]="getPriorityColor(element.priority)">
+                 {{ getPriorityText(element.priority) }}
+               </span>
+             </td>
+           </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="budget">
-          <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14"></th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openEditDeliveryDialog(element)">
-                <mat-icon>edit</mat-icon>
-                <span>Editar</span>
+           <!-- Status Column -->
+           <ng-container matColumnDef="status">
+             <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14">
+               Status
+             </th>
+             <td mat-cell *matCellDef="let element">
+               <span class="rounded f-w-600 p-6 p-y-4 f-s-12" [class]="getStatusColor(element.status)">
+                 {{ getStatusText(element.status) }}
+               </span>
+             </td>
+           </ng-container>
+
+
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="f-w-600 f-s-14"></th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <mat-icon>more_vert</mat-icon>
               </button>
-              <button mat-menu-item (click)="deleteDelivery(element)">
-                <mat-icon>delete</mat-icon>
-                <span>Deletar</span>
-              </button>
-            </mat-menu>
-          </td>
-        </ng-container>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openEditDeliveryDialog(element)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-menu-item (click)="deleteDelivery(element)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Deletar</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
-      </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
+        </table>
+      } @else {
+        <div class="d-flex justify-content-center p-4">
+          <p class="text-muted">Nenhuma entrega cadastrada.</p>
+        </div>
+      }
     </div>
   </mat-card-content>
 </mat-card>
