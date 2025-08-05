@@ -6,14 +6,10 @@ import { MaterialModule } from 'src/app/material.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { DroneFormDialogComponent, Drone } from '../dialogs/form-dialog/drone-form-dialog.component';
 
-export interface Drone {
-  id: string;
-  name: string;
-  weight: number;
-  maxDistance: number;
-  status: 'idle' | 'in-flight' | 'returning';
-}
+
 
 const ELEMENT_DATA: Drone[] = [
   { id: 'D-001', name: 'Zangão Alfa', weight: 5, maxDistance: 50, status: 'idle' },
@@ -46,4 +42,40 @@ export class DronesComponent {
   // table 1
   displayedColumns1: string[] = ['name', 'weight', 'maxDistance', 'status'];
   dataSource1 = ELEMENT_DATA;
+
+  constructor(private dialog: MatDialog) {}
+
+  openAddDroneDialog(): void {
+    const dialogRef = this.dialog.open(DroneFormDialogComponent, {
+      width: '500px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe((result: Drone) => {
+      if (result) {
+        this.dataSource1 = [...this.dataSource1, result];
+      }
+    });
+  }
+
+  openEditDroneDialog(drone: Drone): void {
+    const dialogRef = this.dialog.open(DroneFormDialogComponent, {
+      width: '500px',
+      data: drone
+    });
+
+    dialogRef.afterClosed().subscribe((result: Drone) => {
+      if (result) {
+        const index = this.dataSource1.findIndex(d => d.id === result.id);
+        if (index !== -1) {
+          this.dataSource1[index] = result;
+          this.dataSource1 = [...this.dataSource1];
+        }
+      }
+    });
+  }
+
+  deleteDrone(drone: Drone): void {
+    this.dataSource1 = this.dataSource1.filter(d => d.id !== drone.id);
+  }
 }

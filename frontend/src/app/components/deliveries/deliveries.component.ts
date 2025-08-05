@@ -6,16 +6,10 @@ import { MaterialModule } from 'src/app/material.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { DeliveryFormDialogComponent, Delivery } from '../dialogs/form-dialog/delivery-form-dialog.component';
 
-// table 1
-export interface Delivery {
-  id: string;
-  name: string;       // Nome do cliente ou pedido
-  weight: number;     // Peso em kg
-  position: string;   // Coordenadas (x, y)
-  priority: 'high' | 'medium' | 'low';
-  status: 'delivered' | 'inProgress' | 'waiting' | 'cancelled';
-}
+
 
 const ELEMENT_DATA: Delivery[] = [
   { id: 'PED-001', name: 'Eletrônicos Express', weight: 2.5, position: '(15, 20)', priority: 'high', status: 'inProgress' },
@@ -53,4 +47,40 @@ export class DeliveriesComponent {
   // table 1
   displayedColumns1: string[] = ['name', 'weight', 'position', 'priority', 'status'];
   dataSource1 = ELEMENT_DATA;
+
+  constructor(private dialog: MatDialog) {}
+
+  openAddDeliveryDialog(): void {
+    const dialogRef = this.dialog.open(DeliveryFormDialogComponent, {
+      width: '500px',
+      data: null
+    });
+
+    dialogRef.afterClosed().subscribe((result: Delivery) => {
+      if (result) {
+        this.dataSource1 = [...this.dataSource1, result];
+      }
+    });
+  }
+
+  openEditDeliveryDialog(delivery: Delivery): void {
+    const dialogRef = this.dialog.open(DeliveryFormDialogComponent, {
+      width: '500px',
+      data: delivery
+    });
+
+    dialogRef.afterClosed().subscribe((result: Delivery) => {
+      if (result) {
+        const index = this.dataSource1.findIndex(d => d.id === result.id);
+        if (index !== -1) {
+          this.dataSource1[index] = result;
+          this.dataSource1 = [...this.dataSource1];
+        }
+      }
+    });
+  }
+
+  deleteDelivery(delivery: Delivery): void {
+    this.dataSource1 = this.dataSource1.filter(d => d.id !== delivery.id);
+  }
 }
