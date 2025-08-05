@@ -157,8 +157,11 @@
       <mat-card-content>
         <div class="events-log" *ngIf="events.length > 0; else noEvents">
           <div class="event-item" *ngFor="let event of events.slice(0, 10)">
-            <div class="event-time">{{ formatEventTime(event.timestamp) }}</div>
-            <div class="event-description">{{ event.description }}</div>
+            <div class="event-time">{{ formatEventTime(event.createdAt) }}</div>
+            <div class="event-description">
+              <strong>{{ event.title }}</strong><br>
+              {{ event.description }}
+            </div>
           </div>
         </div>
         <ng-template #noEvents>

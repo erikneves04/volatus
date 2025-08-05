@@ -14,13 +14,15 @@ public class UserServices : IUserServices
     private readonly IUserPermissionRepository _userPermissionRepository;
     private readonly IPermissionServices _permissionServices;
     private readonly IPasswordServices _passwordServices;
+    private readonly IEventServices _eventServices;
 
-    public UserServices(IUserRepository repository, IUserPermissionRepository userPermissionRepository, IPermissionServices permissionServices, IPasswordServices passwordServices)
+    public UserServices(IUserRepository repository, IUserPermissionRepository userPermissionRepository, IPermissionServices permissionServices, IPasswordServices passwordServices, IEventServices eventServices)
     {
         _repository = repository;
         _userPermissionRepository = userPermissionRepository;
         _permissionServices = permissionServices;
         _passwordServices = passwordServices;
+        _eventServices = eventServices;
     }
 
     public IEnumerable<UserViewModel> View(PaginationParams @params)
@@ -52,6 +54,9 @@ public class UserServices : IUserServices
        
        // UpsertPermissions(user, model.Permissions);
 
+        // Criar evento
+        _eventServices.CreateEvent("Novo Usuário Cadastrado", $"Usuário '{user.Name}' ({user.Email}) foi cadastrado no sistema.");
+
         return ConvertToViewModel(Get(user.Id));
     }
 
@@ -71,6 +76,9 @@ public class UserServices : IUserServices
         _repository.Update(user);
         UpsertPermissions(user, model.Permissions);
 
+        // Criar evento
+        _eventServices.CreateEvent("Usuário Atualizado", $"Usuário '{user.Name}' ({user.Email}) foi atualizado no sistema.");
+
         return ConvertToViewModel(Get(user.Id));
     }
 
@@ -79,6 +87,9 @@ public class UserServices : IUserServices
         var user = Get(id);
 
         ThrowIfNull(user, "User");
+
+        // Criar evento antes de deletar
+        _eventServices.CreateEvent("Usuário Removido", $"Usuário '{user.Name}' ({user.Email}) foi removido do sistema.");
 
         UpsertPermissions(user, new List<string>());
         _repository.Delete(user);
