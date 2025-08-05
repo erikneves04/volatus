@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -7,14 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MaterialModule } from 'src/app/material.module';
-
-export interface Drone {
-  id: string;
-  name: string;
-  weight: number;
-  maxDistance: number;
-  status: 'idle' | 'in-flight' | 'returning';
-}
+import { Drone } from '../../../models/drone.model';
 
 @Component({
   selector: 'app-drone-form-dialog',
@@ -43,37 +36,70 @@ export interface Drone {
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Peso Máximo (kg)</mat-label>
-            <input matInput type="number" formControlName="weight" placeholder="Ex: 5">
-            <mat-error *ngIf="droneForm.get('weight')?.hasError('required')">
-              Peso é obrigatório
-            </mat-error>
-            <mat-error *ngIf="droneForm.get('weight')?.hasError('min')">
-              Peso deve ser maior que 0
+            <mat-label>Modelo</mat-label>
+            <input matInput formControlName="model" placeholder="Ex: DJI Mavic">
+            <mat-error *ngIf="droneForm.get('model')?.hasError('required')">
+              Modelo é obrigatório
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Distância Máxima (km)</mat-label>
-            <input matInput type="number" formControlName="maxDistance" placeholder="Ex: 50">
-            <mat-error *ngIf="droneForm.get('maxDistance')?.hasError('required')">
-              Distância é obrigatória
-            </mat-error>
-            <mat-error *ngIf="droneForm.get('maxDistance')?.hasError('min')">
-              Distância deve ser maior que 0
+            <mat-label>Número de Série</mat-label>
+            <input matInput formControlName="serialNumber" placeholder="Ex: SN123456">
+            <mat-error *ngIf="droneForm.get('serialNumber')?.hasError('required')">
+              Número de série é obrigatório
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="idle">Ocioso</mat-option>
-              <mat-option value="in-flight">Em Voo</mat-option>
-              <mat-option value="returning">Retornando</mat-option>
+              <mat-option value="Available">Disponível</mat-option>
+              <mat-option value="InUse">Em uso</mat-option>
+              <mat-option value="Maintenance">Manutenção</mat-option>
+              <mat-option value="Offline">Offline</mat-option>
             </mat-select>
             <mat-error *ngIf="droneForm.get('status')?.hasError('required')">
               Status é obrigatório
             </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Peso Máximo (kg)</mat-label>
+            <input matInput type="number" formControlName="maxWeight" placeholder="Ex: 5">
+            <mat-error *ngIf="droneForm.get('maxWeight')?.hasError('required')">
+              Peso é obrigatório
+            </mat-error>
+            <mat-error *ngIf="droneForm.get('maxWeight')?.hasError('min')">
+              Peso deve ser maior que 0
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Capacidade da Bateria (min)</mat-label>
+            <input matInput type="number" formControlName="batteryCapacity" placeholder="Ex: 60">
+            <mat-error *ngIf="droneForm.get('batteryCapacity')?.hasError('required')">
+              Capacidade é obrigatória
+            </mat-error>
+            <mat-error *ngIf="droneForm.get('batteryCapacity')?.hasError('min')">
+              Capacidade deve ser maior que 0
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Bateria Atual (%)</mat-label>
+            <input matInput type="number" formControlName="currentBattery" placeholder="Ex: 100">
+            <mat-error *ngIf="droneForm.get('currentBattery')?.hasError('required')">
+              Bateria atual é obrigatória
+            </mat-error>
+            <mat-error *ngIf="droneForm.get('currentBattery')?.hasError('min') || droneForm.get('currentBattery')?.hasError('max')">
+              Valor deve ser entre 0 e 100
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Observações</mat-label>
+            <textarea matInput formControlName="notes" placeholder="Observações"></textarea>
           </mat-form-field>
         </div>
       </mat-dialog-content>
@@ -97,8 +123,8 @@ export interface Drone {
     }
   `]
 })
-export class DroneFormDialogComponent {
-  droneForm: FormGroup;
+export class DroneFormDialogComponent implements OnInit {
+  droneForm!: FormGroup;
   isEditMode: boolean = false;
 
   constructor(
@@ -107,22 +133,29 @@ export class DroneFormDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: Drone | null
   ) {
     this.isEditMode = !!data;
+  }
+
+  ngOnInit(): void {
     this.initForm();
   }
 
   private initForm(): void {
     this.droneForm = this.fb.group({
       name: [this.data?.name || '', [Validators.required]],
-      weight: [this.data?.weight || '', [Validators.required, Validators.min(0.1)]],
-      maxDistance: [this.data?.maxDistance || '', [Validators.required, Validators.min(1)]],
-      status: [this.data?.status || 'idle', [Validators.required]]
+      model: [this.data?.model || '', [Validators.required]],
+      serialNumber: [this.data?.serialNumber || '', [Validators.required]],
+      status: [this.data?.status || 'Available', [Validators.required]],
+      maxWeight: [this.data?.maxWeight || null, [Validators.required, Validators.min(0.1)]],
+      batteryCapacity: [this.data?.batteryCapacity || null, [Validators.required, Validators.min(1)]],
+      currentBattery: [this.data?.currentBattery ?? 100, [Validators.required, Validators.min(0), Validators.max(100)]],
+      notes: [this.data?.notes || '']
     });
   }
 
   onSubmit(): void {
-    if (this.droneForm.valid) {
-      const droneData: Drone = {
-        id: this.data?.id || this.generateId(),
+    if (this.droneForm && this.droneForm.valid) {
+      const droneData: Partial<Drone> = {
+        ...this.data,
         ...this.droneForm.value
       };
       this.dialogRef.close(droneData);
@@ -131,9 +164,5 @@ export class DroneFormDialogComponent {
 
   onCancel(): void {
     this.dialogRef.close();
-  }
-
-  private generateId(): string {
-    return 'D-' + Math.random().toString(36).substr(2, 9).toUpperCase();
   }
 } 

@@ -1,28 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MaterialModule } from 'src/app/material.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { DroneFormDialogComponent, Drone } from '../dialogs/form-dialog/drone-form-dialog.component';
-
-
-
-const ELEMENT_DATA: Drone[] = [
-  { id: 'D-001', name: 'Zangão Alfa', weight: 5, maxDistance: 50, status: 'idle' },
-  { id: 'D-002', name: 'Colibri Beta', weight: 2, maxDistance: 80, status: 'in-flight' },
-  { id: 'D-003', name: 'Falcão Gama', weight: 10, maxDistance: 40, status: 'returning' },
-  { id: 'D-004', name: 'Libélula Delta', weight: 1, maxDistance: 100, status: 'idle' },
-  { id: 'D-005', name: 'Águia Ômega', weight: 15, maxDistance: 35, status: 'returning' },
-  { id: 'D-006', name: 'Vespa Épsilon', weight: 3, maxDistance: 65, status: 'idle' },
-  { id: 'D-007', name: 'Gavião Zeta', weight: 8, maxDistance: 45, status: 'in-flight' },
-  { id: 'D-008', name: 'Condor Sigma', weight: 12, maxDistance: 30, status: 'returning' },
-  { id: 'D-009', name: 'Andorinha Rho', weight: 2.5, maxDistance: 75, status: 'idle' },
-  { id: 'D-010', name: 'Coruja Theta', weight: 4, maxDistance: 60, status: 'in-flight' },
-];
+import { DroneFormDialogComponent } from '../dialogs/form-dialog/drone-form-dialog.component';
+import { Drone } from '../../models/drone.model';
+import { DroneService } from '../../services/drone.service';
 
 @Component({
   selector: 'app-drones',
@@ -34,16 +22,36 @@ const ELEMENT_DATA: Drone[] = [
     MatIconModule,
     MatMenuModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './drones.component.html',
   styleUrl: './drones.component.scss'
 })
-export class DronesComponent {
-  // table 1
-  displayedColumns1: string[] = ['name', 'weight', 'maxDistance', 'status'];
-  dataSource1 = ELEMENT_DATA;
+export class DronesComponent implements OnInit {
+  displayedColumns1: string[] = ['name', 'serialNumber', 'maxWeight', 'battery', 'status', 'actions'];
+  dataSource1: Drone[] = [];
+  loading = false;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private droneService: DroneService) {}
+
+  ngOnInit(): void {
+    this.loadDrones();
+  }
+
+  loadDrones(): void {
+    this.loading = true;
+    this.droneService.getAll().subscribe({
+      next: (drones) => {
+        this.dataSource1 = drones || [];
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar drones', err);
+        this.dataSource1 = [];
+        this.loading = false;
+      }
+    });
+  }
 
   openAddDroneDialog(): void {
     const dialogRef = this.dialog.open(DroneFormDialogComponent, {
@@ -51,9 +59,12 @@ export class DronesComponent {
       data: null
     });
 
-    dialogRef.afterClosed().subscribe((result: Drone) => {
+    dialogRef.afterClosed().subscribe((result: Partial<Drone>) => {
       if (result) {
-        this.dataSource1 = [...this.dataSource1, result];
+        this.droneService.create(result).subscribe({
+          next: () => this.loadDrones(),
+          error: (err) => console.error('Erro ao criar drone', err)
+        });
       }
     });
   }
@@ -64,18 +75,22 @@ export class DronesComponent {
       data: drone
     });
 
-    dialogRef.afterClosed().subscribe((result: Drone) => {
-      if (result) {
-        const index = this.dataSource1.findIndex(d => d.id === result.id);
-        if (index !== -1) {
-          this.dataSource1[index] = result;
-          this.dataSource1 = [...this.dataSource1];
-        }
+    dialogRef.afterClosed().subscribe((result: Partial<Drone>) => {
+      if (result && drone.id) {
+        this.droneService.update(drone.id, result).subscribe({
+          next: () => this.loadDrones(),
+          error: (err) => console.error('Erro ao atualizar drone', err)
+        });
       }
     });
   }
 
   deleteDrone(drone: Drone): void {
-    this.dataSource1 = this.dataSource1.filter(d => d.id !== drone.id);
+    if (drone.id) {
+      this.droneService.delete(drone.id).subscribe({
+        next: () => this.loadDrones(),
+        error: (err) => console.error('Erro ao deletar drone', err)
+      });
+    }
   }
 }

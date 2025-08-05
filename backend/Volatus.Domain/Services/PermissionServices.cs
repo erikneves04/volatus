@@ -20,7 +20,7 @@ public class PermissionServices : IPermissionServices
     public IEnumerable<PermissionViewModel> View(PaginationParams @params)
     {
         return _repository
-                .ExecuteQuery(_repository.Query(), @params, PermissionViewModel.Converter)
+                .ExecuteQuery(_repository.Query(), @params, PermissionViewModel.Converter, permission => permission.CreatedAt)
                 .ToList();
     }
 

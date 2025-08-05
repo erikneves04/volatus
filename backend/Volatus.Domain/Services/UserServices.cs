@@ -25,10 +25,8 @@ public class UserServices : IUserServices
 
     public IEnumerable<UserViewModel> View(PaginationParams @params)
     {
-        return _repository
-                .ExecuteQuery(_repository.Query(), @params)
-                .Select(ConvertToViewModel)
-                .ToList();
+        var users = _repository.ExecuteQuery(_repository.Query(), @params);
+        return users.Select(user => ConvertToViewModel(user)).ToList();
     }
 
     public UserViewModel View(Guid id)

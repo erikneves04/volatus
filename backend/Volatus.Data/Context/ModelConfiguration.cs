@@ -10,5 +10,6 @@ public static class ModelConfiguration
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new PermissionConfiguration());
         modelBuilder.ApplyConfiguration(new UserPermissionConfiguration());
+        modelBuilder.ApplyConfiguration(new DroneConfiguration());
     }
 }

@@ -26,9 +26,11 @@ IWebHostEnvironment environment = builder.Environment;
 services.AddScoped<IUserRepository, UserRepository>();
 services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
 services.AddScoped<IPermissionRepository, PermissionRepository>();
+services.AddScoped<IDroneRepository, DroneRepository>();
 
 services.AddScoped<IUserServices, UserServices>();
 services.AddScoped<IPermissionServices, PermissionServices>();
+services.AddScoped<IDroneServices, DroneServices>();
 services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 services.AddScoped<ISessionServices, SessionServices>();
 services.AddScoped<IPasswordServices, PasswordServices>();
@@ -36,9 +38,11 @@ services.AddScoped<IPasswordServices, PasswordServices>();
 // Add HttpContextAccessor
 services.AddHttpContextAccessor();
 
-
 services.AddControllers();
-services.AddOpenApi();
+
+// Configure Swagger/OpenAPI
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -46,21 +50,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-Console.WriteLine("Environment: ");
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
+Console.WriteLine("Environment: " + environment.EnvironmentName);
 
-    // Migrating database
-    Console.WriteLine("Migrating database...");
-    using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
-    Console.WriteLine("Database migrated successfully");
-}
+// Configure the HTTP request pipeline
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Migrating database
+Console.WriteLine("Migrating database...");
+using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+Console.WriteLine("Database migrated successfully");
 
 app.MapGet("/", () =>
 {
-    return Results.Ok();
+    return Results.Ok("Volatus API is running!");
 });
 
 app.UseHttpsRedirection();
