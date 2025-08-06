@@ -26,7 +26,6 @@ import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, Recent
   styleUrls: ['./dashboard-stats.component.scss']
 })
 export class DashboardStatsComponent implements OnInit, OnDestroy {
-  // Dados que virão do backend
   drones: DroneStatus[] = [];
   recentDeliveries: RecentDelivery[] = [];
   events: RecentEvent[] = [];
@@ -43,15 +42,11 @@ export class DashboardStatsComponent implements OnInit, OnDestroy {
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    // Aqui será feita a conexão com o backend
     this.loadDashboardData();
-    
-    // Iniciar atualização automática a cada 3 segundos
     this.startAutoRefresh();
   }
 
   ngOnDestroy(): void {
-    // Limpar o timer quando o componente for destruído
     this.stopAutoRefresh();
   }
 
@@ -69,16 +64,9 @@ export class DashboardStatsComponent implements OnInit, OnDestroy {
   }
 
   loadDashboardData(): void {
-    // Carregar métricas do dashboard
     this.dashboardService.getMetrics().subscribe(metrics => this.metrics = metrics);
-    
-    // Carregar status dos drones
     this.dashboardService.getDroneStatus().subscribe(drones => this.drones = drones);
-    
-    // Carregar entregas recentes
     this.dashboardService.getRecentDeliveries(5).subscribe(deliveries => this.recentDeliveries = deliveries);
-    
-    // Carregar eventos recentes
     this.dashboardService.getRecentEvents(10).subscribe(events => this.events = events);
   }
 

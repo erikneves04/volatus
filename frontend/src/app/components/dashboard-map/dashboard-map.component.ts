@@ -22,7 +22,6 @@ import { DronePositionMapComponent } from '../drone-position-map/drone-position-
   styleUrls: ['./dashboard-map.component.scss']
 })
 export class DashboardMapComponent implements OnInit, OnDestroy {
-  // Dados que virão do backend
   drones: DroneStatus[] = [];
 
   private autoRefreshTimer: any;
@@ -31,15 +30,11 @@ export class DashboardMapComponent implements OnInit, OnDestroy {
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
-    // Aqui será feita a conexão com o backend
     this.loadDashboardData();
-    
-    // Iniciar atualização automática a cada 3 segundos
     this.startAutoRefresh();
   }
 
   ngOnDestroy(): void {
-    // Limpar o timer quando o componente for destruído
     this.stopAutoRefresh();
   }
 
@@ -57,7 +52,6 @@ export class DashboardMapComponent implements OnInit, OnDestroy {
   }
 
   loadDashboardData(): void {
-    // Carregar status dos drones
     this.dashboardService.getDroneStatus().subscribe(drones => this.drones = drones);
   }
 

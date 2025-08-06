@@ -17,36 +17,54 @@
   </div>
   
   <div class="map-container">
-    <div class="grid-container" 
-         [style.width.px]="gridWidth * cellSize"
-         [style.height.px]="gridHeight * cellSize">
+    <!-- Marcações de escala no eixo Y (lateral esquerda) -->
+    <div class="y-axis-labels">
+      <div class="y-label" *ngFor="let y of yAxisLabels; let i = index" [style.top.px]="getYLabelPosition(i)">
+        {{ y }}
+      </div>
+    </div>
+    
+    <!-- Container principal do mapa -->
+    <div class="map-content">
+      <!-- Marcações de escala no eixo X (parte inferior) -->
+      <div class="x-axis-labels">
+        <div class="x-label" *ngFor="let x of xAxisLabels; let i = index" [style.left.px]="getXLabelPosition(i)">
+          {{ x }}
+        </div>
+      </div>
       
-      <div class="grid-row" *ngFor="let row of grid; let y = index">
-        <div class="grid-cell" 
-             *ngFor="let cell of row; let x = index"
-             [class]="getCellClass(cell)"
-             [matTooltip]="getCellTooltip(cell)"
-             matTooltipPosition="above">
-          
-          <!-- Drone -->
-          <mat-icon *ngIf="cell.type === 'drone'" 
-                    class="drone-icon"
-                    [style.color]="getDroneStatusColor(cell.drone.status)">
-            drone
-          </mat-icon>
-          
-          <!-- Target -->
-          <mat-icon *ngIf="cell.type === 'target'" 
-                    class="target-icon">
-            place
-          </mat-icon>
-          
-          <!-- Base -->
-          <mat-icon *ngIf="cell.type === 'base'" 
-                    class="base-icon">
-            home
-          </mat-icon>
-          
+      <!-- Grid do mapa -->
+      <div class="grid-container" 
+           [style.width.px]="gridWidth * cellSize"
+           [style.height.px]="gridHeight * cellSize">
+        
+        <div class="grid-row" *ngFor="let row of grid; let y = index">
+          <div class="grid-cell" 
+               *ngFor="let cell of row; let x = index"
+               [class]="getCellClass(cell)"
+               [matTooltip]="getCellTooltip(cell)"
+               matTooltipPosition="above">
+            
+            <!-- Drone -->
+            <mat-icon *ngIf="cell.type === 'drone'" 
+                      class="drone-icon"
+                      [style.color]="getDroneStatusColor(cell.drone.status)">
+              drone
+            </mat-icon>
+            
+            <!-- Target -->
+            <mat-icon *ngIf="cell.type === 'target'" 
+                      class="target-icon">
+              place
+            </mat-icon>
+            
+            <!-- Base -->
+            <mat-icon *ngIf="cell.type === 'base'" 
+                      class="base-icon">
+              home
+            </mat-icon>
+            
+          </div>
         </div>
       </div>
     </div>

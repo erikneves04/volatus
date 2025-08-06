@@ -27,8 +27,13 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
   
   grid: any[][] = [];
   
+  // Marcações de escala
+  xAxisLabels: number[] = [];
+  yAxisLabels: number[] = [];
+  
   ngOnInit(): void {
     this.initializeGrid();
+    this.initializeAxisLabels();
     this.updateDronePositions();
   }
   
@@ -48,12 +53,39 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
     }
   }
   
+  private initializeAxisLabels(): void {
+    // Criar marcações do eixo X (0, 5, 10, 15, 20, 25, 30, 35, 40)
+    this.xAxisLabels = [];
+    for (let i = 0; i <= 40; i += 5) {
+      this.xAxisLabels.push(i);
+    }
+    
+    // Criar marcações do eixo Y (0, 5, 10, 15, 20, 25) - de baixo para cima
+    this.yAxisLabels = [];
+    for (let i = 0; i <= 25; i += 5) {
+      this.yAxisLabels.push(i);
+    }
+  }
+  
+  getXLabelPosition(index: number): number {
+    // Calcular posição baseada no índice e largura da célula
+    const position = (index * 5) * this.cellSize;
+    return Math.max(0, position - 15); // Ajuste para centralizar o label
+  }
+  
+  getYLabelPosition(index: number): number {
+    // Calcular posição baseada no índice e altura da célula
+    // Labels de baixo para cima: 0 na base, 25 no topo
+    const position = (this.gridHeight - 1 - (index * 5)) * this.cellSize;
+    return Math.max(0, position - 12); // Ajuste para centralizar o label
+  }
+  
   private updateDronePositions(): void {
     this.initializeGrid();
     
-    // Marcar a base na posição central (0,0)
-    const baseGridX = Math.floor((0 + 10) * (this.gridWidth - 1) / 20);
-    const baseGridY = Math.floor((0 + 10) * (this.gridHeight - 1) / 20);
+    // Marcar a base na posição (0,0) - canto esquerdo inferior
+    const baseGridX = 0;
+    const baseGridY = this.gridHeight - 1; // Última linha (parte inferior)
     this.grid[baseGridY][baseGridX] = {
       type: 'base',
       drone: null
@@ -61,10 +93,12 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
     
     this.drones.forEach(drone => {
       // Converter coordenadas para posições na grade
-      const currentGridX = Math.floor((drone.currentX + 10) * (this.gridWidth - 1) / 20);
-      const currentGridY = Math.floor((drone.currentY + 10) * (this.gridHeight - 1) / 20);
-      const targetGridX = Math.floor((drone.targetX + 10) * (this.gridWidth - 1) / 20);
-      const targetGridY = Math.floor((drone.targetY + 10) * (this.gridHeight - 1) / 20);
+      // Agora (0,0) está no canto esquerdo inferior
+      const currentGridX = Math.floor(drone.currentX);
+      // Inverter o eixo Y: quanto maior o Y, menor a posição na grade (de baixo para cima)
+      const currentGridY = this.gridHeight - 1 - Math.floor(drone.currentY);
+      const targetGridX = Math.floor(drone.targetX);
+      const targetGridY = this.gridHeight - 1 - Math.floor(drone.targetY);
       
       // Garantir que as posições estejam dentro dos limites
       const safeCurrentX = Math.max(0, Math.min(this.gridWidth - 1, currentGridX));

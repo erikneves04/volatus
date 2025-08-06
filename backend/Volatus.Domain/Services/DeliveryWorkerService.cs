@@ -86,7 +86,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
                     bestDrone.TargetX = delivery.X;
                     bestDrone.TargetY = delivery.Y;
                     bestDrone.Status = "Em Uso";
-                    bestDrone.IsCharging = false; // Stop charging if was charging
+                    bestDrone.IsCharging = false;
                     
                     _deliveryRepository.Update(delivery);
                     _droneRepository.Update(bestDrone);
@@ -113,7 +113,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
             var activeDrones = allDrones.Where(d => 
                 d.Status == "Em Uso" || 
                 d.Status == "Retornando à base" || 
-                (d.Status == "Disponível" && d.IsCharging)
+                (d.Status == "Disponível")
             ).ToList();
             
             int movedCount = 0;
@@ -297,13 +297,13 @@ public class DeliveryWorkerService : IDeliveryWorkerService
 
     private bool IsAtBase(Drone drone)
     {
-        return Math.Abs(drone.CurrentX) < 0.1 && Math.Abs(drone.CurrentY) < 0.1;
+        return Math.Abs(drone.CurrentX) < 0.5 && Math.Abs(drone.CurrentY) < 0.5;
     }
 
     private bool IsAtDeliveryLocation(Drone drone, Delivery delivery)
     {
         var distance = CalculateDistance(drone.CurrentX, drone.CurrentY, delivery.X, delivery.Y);
-        return distance <= 0.1;
+        return distance <= 0.5;
     }
 
     private Delivery FindNearestDelivery(List<Delivery> deliveries, double currentX, double currentY)
