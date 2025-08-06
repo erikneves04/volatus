@@ -81,6 +81,17 @@
 
   <!-- Conteúdo principal -->
   <div class="main-content">
+    <!-- Mapa de Posições dos Drones -->
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <mat-card-title>Mapa de Posições dos Drones</mat-card-title>
+        <mat-card-subtitle>Visualização em tempo real das posições e destinos</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-drone-position-map [drones]="drones"></app-drone-position-map>
+      </mat-card-content>
+    </mat-card>
+
     <!-- Status dos Drones -->
     <mat-card class="detail-card">
       <mat-card-header>

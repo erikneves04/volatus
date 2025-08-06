@@ -1,0 +1,65 @@
+<div class="drone-position-map">
+  <div class="map-header">
+    <h3>Mapa de Posições dos Drones</h3>
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-icon drone-icon"></div>
+        <span>Drone</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon target-icon"></div>
+        <span>Destino</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="map-container">
+    <div class="grid-container" 
+         [style.width.px]="gridSize * cellSize"
+         [style.height.px]="gridSize * cellSize">
+      
+      <div class="grid-row" *ngFor="let row of grid; let y = index">
+        <div class="grid-cell" 
+             *ngFor="let cell of row; let x = index"
+             [class]="getCellClass(cell)"
+             [matTooltip]="getCellTooltip(cell)"
+             matTooltipPosition="above">
+          
+          <!-- Drone -->
+          <mat-icon *ngIf="cell.type === 'drone'" 
+                    class="drone-icon"
+                    [style.color]="getDroneStatusColor(cell.drone.status)">
+            drone
+          </mat-icon>
+          
+          <!-- Target -->
+          <mat-icon *ngIf="cell.type === 'target'" 
+                    class="target-icon">
+            place
+          </mat-icon>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Lista de drones com posições -->
+  <div class="drone-list">
+    <h4>Drones Ativos</h4>
+    <div class="drone-item" *ngFor="let drone of drones">
+      <div class="drone-info">
+        <strong>{{ drone.name }}</strong>
+        <span class="drone-status">{{ getDroneStatusLabel(drone.status) }}</span>
+      </div>
+      <div class="drone-position">
+        <div class="position-info">
+          <span>Atual: ({{ drone.currentX.toFixed(1) }}, {{ drone.currentY.toFixed(1) }})</span>
+          <span>Destino: ({{ drone.targetX.toFixed(1) }}, {{ drone.targetY.toFixed(1) }})</span>
+        </div>
+        <div class="battery-info">
+          <span class="battery-level">{{ drone.batteryLevel }}%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

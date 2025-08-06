@@ -10,4 +10,10 @@ export interface Drone {
   notes?: string;
   createdAt?: string;
   updatedAt?: string;
+  
+  // Position properties
+  currentX?: number;
+  currentY?: number;
+  targetX?: number;
+  targetY?: number;
 }

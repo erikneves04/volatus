@@ -8,4 +8,10 @@ public class DroneStatusViewModel
     public string Status { get; set; } = string.Empty;
     public int BatteryLevel { get; set; }
     public DateTime LastUpdate { get; set; }
+    
+    // Position properties
+    public double CurrentX { get; set; }
+    public double CurrentY { get; set; }
+    public double TargetX { get; set; }
+    public double TargetY { get; set; }
 } 

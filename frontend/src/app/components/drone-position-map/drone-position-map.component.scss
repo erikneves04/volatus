@@ -1,0 +1,214 @@
+.drone-position-map {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  
+  .map-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    h3 {
+      margin: 0;
+      color: #333;
+    }
+    
+    .legend {
+      display: flex;
+      gap: 1rem;
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        
+        .legend-icon {
+          width: 16px;
+          height: 16px;
+          border-radius: 2px;
+          
+          &.drone-icon {
+            background-color: #1976d2;
+          }
+          
+          &.target-icon {
+            background-color: #f57c00;
+          }
+        }
+      }
+    }
+  }
+  
+  .map-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    
+    .grid-container {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: #f5f5f5;
+      
+      .grid-row {
+        display: flex;
+        
+        .grid-cell {
+          width: 30px;
+          height: 30px;
+          border: 1px solid #e0e0e0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          transition: all 0.2s ease;
+          
+          &.drone-cell {
+            background-color: rgba(25, 118, 210, 0.1);
+            border-color: #1976d2;
+            
+            .drone-icon {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+          }
+          
+          &.target-cell {
+            background-color: rgba(245, 124, 0, 0.1);
+            border-color: #f57c00;
+            
+            .target-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+              color: #f57c00;
+            }
+          }
+          
+          &.empty-cell {
+            background-color: transparent;
+          }
+          
+          &:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+    }
+  }
+  
+  .drone-list {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    
+    h4 {
+      margin: 0 0 1rem 0;
+      color: #333;
+      font-size: 1.1rem;
+    }
+    
+    .drone-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .drone-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        
+        strong {
+          color: #333;
+          font-size: 0.95rem;
+        }
+        
+        .drone-status {
+          font-size: 0.8rem;
+          color: #666;
+          padding: 0.25rem 0.5rem;
+          background-color: #f5f5f5;
+          border-radius: 4px;
+          display: inline-block;
+        }
+      }
+      
+      .drone-position {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+        
+        .position-info {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          font-size: 0.8rem;
+          color: #666;
+          
+          span {
+            margin-bottom: 0.125rem;
+          }
+        }
+        
+        .battery-info {
+          .battery-level {
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            border-radius: 4px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 768px) {
+  .drone-position-map {
+    .map-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .map-container {
+      .grid-container {
+        transform: scale(0.8);
+        transform-origin: center;
+      }
+    }
+    
+    .drone-list {
+      .drone-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        
+        .drone-position {
+          align-items: flex-start;
+          width: 100%;
+          
+          .position-info {
+            align-items: flex-start;
+          }
+        }
+      }
+    }
+  }
+} 

@@ -8,6 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MaterialModule } from 'src/app/material.module';
 import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, RecentEvent } from '../../services/dashboard.service';
+import { DronePositionMapComponent } from '../drone-position-map/drone-position-map.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,8 @@ import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, Recent
     MatTableModule,
     MatProgressBarModule,
     MatChipsModule,
-    MaterialModule
+    MaterialModule,
+    DronePositionMapComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

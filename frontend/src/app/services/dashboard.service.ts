@@ -21,6 +21,12 @@ export interface DroneStatus {
   status: string;
   batteryLevel: number;
   lastUpdate: string;
+  
+  // Position properties
+  currentX: number;
+  currentY: number;
+  targetX: number;
+  targetY: number;
 }
 
 export interface RecentDelivery {
@@ -58,7 +64,8 @@ export class DashboardService {
   }
 
   getDroneStatus(): Observable<DroneStatus[]> {
-    return this.http.get<ApiResponse<DroneStatus[]>>(`${this.apiUrl}/drones/status`).pipe(
+    // Temporariamente usando dados de exemplo para testar o mapa
+    return this.http.get<ApiResponse<DroneStatus[]>>(`${this.apiUrl}/drones/status/example`).pipe(
       map(response => response.data)
     );
   }
