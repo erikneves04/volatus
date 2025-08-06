@@ -64,8 +64,7 @@ export class DashboardService {
   }
 
   getDroneStatus(): Observable<DroneStatus[]> {
-    // Temporariamente usando dados de exemplo para testar o mapa
-    return this.http.get<ApiResponse<DroneStatus[]>>(`${this.apiUrl}/drones/status/example`).pipe(
+    return this.http.get<ApiResponse<DroneStatus[]>>(`${this.apiUrl}/drones/status`).pipe(
       map(response => response.data)
     );
   }

@@ -1,16 +1,20 @@
 <div class="drone-position-map">
   <div class="map-header">
     <h3>Mapa de Posições dos Drones</h3>
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-icon drone-icon"></div>
-        <span>Drone</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-icon target-icon"></div>
-        <span>Destino</span>
-      </div>
-    </div>
+         <div class="legend">
+       <div class="legend-item">
+         <div class="legend-icon base-icon"></div>
+         <span>Base</span>
+       </div>
+       <div class="legend-item">
+         <div class="legend-icon drone-icon"></div>
+         <span>Drone</span>
+       </div>
+       <div class="legend-item">
+         <div class="legend-icon target-icon"></div>
+         <span>Destino</span>
+       </div>
+     </div>
   </div>
   
   <div class="map-container">
@@ -25,18 +29,24 @@
              [matTooltip]="getCellTooltip(cell)"
              matTooltipPosition="above">
           
-          <!-- Drone -->
-          <mat-icon *ngIf="cell.type === 'drone'" 
-                    class="drone-icon"
-                    [style.color]="getDroneStatusColor(cell.drone.status)">
-            drone
-          </mat-icon>
-          
-          <!-- Target -->
-          <mat-icon *ngIf="cell.type === 'target'" 
-                    class="target-icon">
-            place
-          </mat-icon>
+                     <!-- Drone -->
+           <mat-icon *ngIf="cell.type === 'drone'" 
+                     class="drone-icon"
+                     [style.color]="getDroneStatusColor(cell.drone.status)">
+             drone
+           </mat-icon>
+           
+           <!-- Target -->
+           <mat-icon *ngIf="cell.type === 'target'" 
+                     class="target-icon">
+             place
+           </mat-icon>
+           
+           <!-- Base -->
+           <mat-icon *ngIf="cell.type === 'base'" 
+                     class="base-icon">
+             home
+           </mat-icon>
           
         </div>
       </div>

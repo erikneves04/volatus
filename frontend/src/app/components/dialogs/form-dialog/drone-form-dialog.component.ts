@@ -76,7 +76,7 @@ import { Drone } from '../../../models/drone.model';
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Capacidade da Bateria (min)</mat-label>
+            <mat-label>Capacidade da Bateria</mat-label>
             <input matInput type="number" formControlName="batteryCapacity" placeholder="Ex: 60">
             <mat-error *ngIf="droneForm.get('batteryCapacity')?.hasError('required')">
               Capacidade é obrigatória

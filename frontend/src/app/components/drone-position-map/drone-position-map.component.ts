@@ -48,6 +48,14 @@ export class DronePositionMapComponent implements OnInit {
   private updateDronePositions(): void {
     this.initializeGrid();
     
+    // Marcar a base na posição central (0,0)
+    const baseGridX = Math.floor((0 + 10) * (this.gridSize - 1) / 20);
+    const baseGridY = Math.floor((0 + 10) * (this.gridSize - 1) / 20);
+    this.grid[baseGridY][baseGridX] = {
+      type: 'base',
+      drone: null
+    };
+    
     this.drones.forEach(drone => {
       // Converter coordenadas para posições na grade
       const currentGridX = Math.floor((drone.currentX + 10) * (this.gridSize - 1) / 20);
@@ -61,14 +69,17 @@ export class DronePositionMapComponent implements OnInit {
       const safeTargetX = Math.max(0, Math.min(this.gridSize - 1, targetGridX));
       const safeTargetY = Math.max(0, Math.min(this.gridSize - 1, targetGridY));
       
-      // Marcar posição atual do drone
-      this.grid[safeCurrentY][safeCurrentX] = {
-        type: 'drone',
-        drone: drone
-      };
+      // Marcar posição atual do drone (se não for a base)
+      if (safeCurrentX !== baseGridX || safeCurrentY !== baseGridY) {
+        this.grid[safeCurrentY][safeCurrentX] = {
+          type: 'drone',
+          drone: drone
+        };
+      }
       
-      // Marcar posição de destino (se diferente da atual)
-      if (safeTargetX !== safeCurrentX || safeTargetY !== safeCurrentY) {
+      // Marcar posição de destino (se diferente da atual e não for a base)
+      if ((safeTargetX !== safeCurrentX || safeTargetY !== safeCurrentY) && 
+          (safeTargetX !== baseGridX || safeTargetY !== baseGridY)) {
         this.grid[safeTargetY][safeTargetX] = {
           type: 'target',
           drone: drone
@@ -83,6 +94,8 @@ export class DronePositionMapComponent implements OnInit {
         return 'drone-cell';
       case 'target':
         return 'target-cell';
+      case 'base':
+        return 'base-cell';
       default:
         return 'empty-cell';
     }
@@ -109,7 +122,9 @@ export class DronePositionMapComponent implements OnInit {
   }
   
   getCellTooltip(cell: any): string {
-    if (cell.type === 'drone' && cell.drone) {
+    if (cell.type === 'base') {
+      return 'Base de Operações - Posição: (0, 0)';
+    } else if (cell.type === 'drone' && cell.drone) {
       return `${cell.drone.name} - Posição: (${cell.drone.currentX.toFixed(1)}, ${cell.drone.currentY.toFixed(1)}) - Bateria: ${cell.drone.batteryLevel}%`;
     } else if (cell.type === 'target' && cell.drone) {
       return `Destino de ${cell.drone.name} - (${cell.drone.targetX.toFixed(1)}, ${cell.drone.targetY.toFixed(1)})`;
