@@ -30,7 +30,7 @@ public class DroneMovementService : IDroneMovementService
 
             foreach (var drone in activeDrones)
             {
-                if (drone.Status == "InUse")
+                if (drone.Status == "Em Uso")
                 {
                     var reachedTarget = await MoveDroneTowardsTargetAsync(drone);
                     if (reachedTarget)
@@ -39,7 +39,7 @@ public class DroneMovementService : IDroneMovementService
                     }
                     movedCount++;
                 }
-                else if (drone.Status == "Available" && IsAtBase(drone))
+                else if (drone.Status == "Disponível" && IsAtBase(drone))
                 {
                     await ChargeDroneAtBaseAsync(drone);
                     movedCount++;
@@ -121,27 +121,27 @@ public class DroneMovementService : IDroneMovementService
     {
         // Check if drone is at a delivery location
         var deliveries = await _deliveryRepository.GetDeliveriesByDroneIdAsync(drone.Id);
-        var currentDelivery = deliveries.FirstOrDefault(d => d.Status == "InProgress");
+        var currentDelivery = deliveries.FirstOrDefault(d => d.Status == "Em Progresso");
         
         if (currentDelivery != null && IsAtDeliveryLocation(drone, currentDelivery))
         {
             // Complete delivery
-            currentDelivery.Status = "Delivered";
+            currentDelivery.Status = "Entregue";
             currentDelivery.DeliveredDate = DateTime.UtcNow;
             _deliveryRepository.Update(currentDelivery);
             
             // Set drone to return to base
             drone.TargetX = 0;
             drone.TargetY = 0;
-            drone.Status = "Returning";
+            drone.Status = "Retornando à base";
             _droneRepository.Update(drone);
             
             _logger.LogInformation($"Delivery {currentDelivery.Id} completed by drone {drone.Id}");
         }
-        else if (IsAtBase(drone) && drone.Status == "Returning")
+        else if (IsAtBase(drone) && drone.Status == "Retornando à base")
         {
             // Drone returned to base
-            drone.Status = "Available";
+            drone.Status = "Disponível";
             drone.IsCharging = true;
             _droneRepository.Update(drone);
             

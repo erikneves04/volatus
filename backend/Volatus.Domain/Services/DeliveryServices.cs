@@ -40,7 +40,6 @@ public class DeliveryServices : IDeliveryServices
         var delivery = ConvertToEntity(model);
         _repository.Insert(delivery);
 
-        // Criar evento
         _eventServices.CreateEvent("Nova Entrega Cadastrada", $"Entrega para '{delivery.CustomerName}' foi cadastrada no sistema.");
 
         return ConvertToViewModel(Get(delivery.Id));
@@ -64,7 +63,6 @@ public class DeliveryServices : IDeliveryServices
 
         _repository.Update(delivery);
 
-        // Criar evento
         _eventServices.CreateEvent("Entrega Atualizada", $"Entrega para '{delivery.CustomerName}' foi atualizada no sistema.");
 
         return ConvertToViewModel(Get(delivery.Id));
@@ -75,7 +73,6 @@ public class DeliveryServices : IDeliveryServices
         var delivery = Get(id);
         ThrowIfNull(delivery, "Delivery");
 
-        // Criar evento antes de deletar
         _eventServices.CreateEvent("Entrega Removida", $"Entrega para '{delivery.CustomerName}' foi removida do sistema.");
 
         _repository.Delete(delivery);
@@ -89,21 +86,18 @@ public class DeliveryServices : IDeliveryServices
         var drone = _droneRepository.Query().Where(d => d.Id == model.DroneId).FirstOrDefault();
         ThrowIfNull(drone, "Drone");
 
-        // Verificar se o drone está disponível
-        if (drone.Status != "Available")
+        if (drone.Status != "Disponível")
             throw new BadRequestException("Drone is not available for assignment.");
 
         // Verificar se o peso da entrega não excede a capacidade do drone
         if (delivery.Weight > drone.MaxWeight)
             throw new BadRequestException($"Delivery weight ({delivery.Weight}kg) exceeds drone capacity ({drone.MaxWeight}kg).");
 
-        // Atualizar a entrega com o drone
         delivery.DroneId = model.DroneId;
-        delivery.Status = "InProgress";
+        delivery.Status = "Em Progresso";
         _repository.Update(delivery);
 
-        // Atualizar o status do drone
-        drone.Status = "InUse";
+        drone.Status = "Em Uso";
         _droneRepository.Update(drone);
 
         // Criar evento
@@ -115,7 +109,7 @@ public class DeliveryServices : IDeliveryServices
     public DashboardMetricsViewModel GetDashboardMetrics()
     {
         var allDeliveries = _repository.Query().ToList();
-        var completedDeliveries = allDeliveries.Where(d => d.Status == "Delivered").ToList();
+        var completedDeliveries = allDeliveries.Where(d => d.Status == "Entregue").ToList();
         
         var totalDeliveries = allDeliveries.Count;
         var completedCount = completedDeliveries.Count;
@@ -143,7 +137,7 @@ public class DeliveryServices : IDeliveryServices
     public IEnumerable<DeliveryViewModel> GetRecentDeliveries(int count)
     {
         var recentDeliveries = _repository.Query()
-            .Where(d => d.Status == "Delivered" || d.Status == "InProgress")
+            .Where(d => d.Status == "Entregue" || d.Status == "Em Progresso")
             .OrderByDescending(d => d.CreatedAt)
             .Take(count)
             .ToList();

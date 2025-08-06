@@ -99,10 +99,10 @@ function coordinateRangeValidator(control: AbstractControl): ValidationErrors | 
                      <mat-form-field appearance="outline" class="full-width">
              <mat-label>Status</mat-label>
              <mat-select formControlName="status">
-               <mat-option value="Pending">Pendente</mat-option>
-               <mat-option value="InProgress">Em Andamento</mat-option>
-               <mat-option value="Delivered">Entregue</mat-option>
-               <mat-option value="Cancelled">Cancelada</mat-option>
+               <mat-option value="Pendente">Pendente</mat-option>
+               <mat-option value="Em Progresso">Em Progresso</mat-option>
+               <mat-option value="Entregue">Entregue</mat-option>
+               <mat-option value="Cancelado">Cancelado</mat-option>
              </mat-select>
              <mat-error *ngIf="deliveryForm.get('status')?.hasError('required')">
                Status é obrigatório
@@ -112,9 +112,9 @@ function coordinateRangeValidator(control: AbstractControl): ValidationErrors | 
            <mat-form-field appearance="outline" class="full-width">
              <mat-label>Prioridade</mat-label>
              <mat-select formControlName="priority">
-               <mat-option value="Low">Baixa</mat-option>
-               <mat-option value="Medium">Média</mat-option>
-               <mat-option value="High">Alta</mat-option>
+               <mat-option value="Baixa">Baixa</mat-option>
+               <mat-option value="Média">Média</mat-option>
+               <mat-option value="Alta">Alta</mat-option>
              </mat-select>
              <mat-error *ngIf="deliveryForm.get('priority')?.hasError('required')">
                Prioridade é obrigatória
@@ -175,8 +175,8 @@ export class DeliveryFormDialogComponent implements OnInit {
       ]],
       description: [this.data?.description || '', [Validators.required]],
       weight: [this.data?.weight || null, [Validators.required, Validators.min(0.1)]],
-      status: [this.data?.status || 'Pending', [Validators.required]],
-      priority: [this.data?.priority || 'Medium', [Validators.required]],
+      status: [this.data?.status || 'Pendente', [Validators.required]],
+      priority: [this.data?.priority || 'Média', [Validators.required]],
       deliveredDate: [this.data?.deliveredDate ? new Date(this.data.deliveredDate) : null],
       notes: [this.data?.notes || '']
     });

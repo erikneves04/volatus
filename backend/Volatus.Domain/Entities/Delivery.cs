@@ -21,23 +21,22 @@ public class Delivery : Entity
     public string CustomerName { get; set; }
     public string CustomerAddress { get; set; } // Format: "(x, y)"
     public string Description { get; set; }
-    public double Weight { get; set; } // in kg
-    public string Status { get; set; } // Pending, InProgress, Delivered, Cancelled
-    public string Priority { get; set; } // Low, Medium, High
+    public double Weight { get; set; } // kg
+    public string Status { get; set; } // Pendente, Em Progresso, Entregue, Cancelado
+    public string Priority { get; set; } // Baixa, Média, Alta
     public DateTime? DeliveredDate { get; set; }
     public string? Notes { get; set; }
-    public Guid? DroneId { get; set; } // Optional drone assignment
+    public Guid? DroneId { get; set; }
     public virtual Drone? Drone { get; set; }
     
     // Coordinate properties
-    public double X { get; set; } // X coordinate
-    public double Y { get; set; } // Y coordinate
+    public double X { get; set; }
+    public double Y { get; set; }
     
     private void ParseAddressToCoordinates()
     {
         if (string.IsNullOrEmpty(CustomerAddress)) return;
         
-        // Remove parentheses and split by comma
         var cleanAddress = CustomerAddress.Trim('(', ')');
         var parts = cleanAddress.Split(',');
         
@@ -67,11 +66,9 @@ public class DeliveryConfiguration : IEntityTypeConfiguration<Delivery>
         builder.Property(delivery => delivery.Notes).HasMaxLength(500);
         builder.Property(delivery => delivery.DroneId);
         
-        // Coordinate properties
         builder.Property(delivery => delivery.X).IsRequired();
         builder.Property(delivery => delivery.Y).IsRequired();
 
-        // Foreign key relationship with Drone (optional)
         builder.HasOne(delivery => delivery.Drone)
                .WithMany()
                .HasForeignKey(delivery => delivery.DroneId)

@@ -106,9 +106,9 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
   
   getDroneStatusColor(status: string): string {
     const colors: { [key: string]: string } = {
-      'Available': 'primary',
-      'InUse': 'accent',
-      'Maintenance': 'warn',
+      'Disponível': 'primary',
+      'Em Uso': 'accent',
+      'Manutenção': 'warn',
       'Offline': 'disabled'
     };
     return colors[status] || 'primary';
@@ -116,9 +116,9 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
   
   getDroneStatusLabel(status: string): string {
     const labels: { [key: string]: string } = {
-      'Available': 'Disponível',
-      'InUse': 'Em Uso',
-      'Maintenance': 'Manutenção',
+      'Disponível': 'Disponível',
+      'Em Uso': 'Em Uso',
+      'Manutenção': 'Manutenção',
       'Offline': 'Offline'
     };
     return labels[status] || status;

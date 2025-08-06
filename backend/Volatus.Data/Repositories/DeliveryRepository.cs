@@ -10,7 +10,7 @@ public class DeliveryRepository : Repository<Delivery>, IDeliveryRepository
     
     public Task<List<Delivery>> GetPendingDeliveriesAsync()
     {
-        var pendingDeliveries = Get(d => d.Status == "Pending");
+        var pendingDeliveries = Get(d => d.Status == "Pendente");
         return Task.FromResult(pendingDeliveries);
     }
     

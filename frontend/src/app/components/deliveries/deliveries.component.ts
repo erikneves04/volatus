@@ -96,31 +96,16 @@ export class DeliveriesComponent implements OnInit {
 
   getStatusColor(status: string): string {
     switch (status) {
-      case 'Pending':
+      case 'Pendente':
         return 'bg-light-warning text-warning';
-      case 'InProgress':
+      case 'Em Progresso':
         return 'bg-light-info text-info';
-      case 'Delivered':
+      case 'Entregue':
         return 'bg-light-success text-success';
-      case 'Cancelled':
+      case 'Cancelado':
         return 'bg-light-error text-error';
       default:
         return 'bg-light-secondary text-secondary';
-    }
-  }
-
-  getStatusText(status: string): string {
-    switch (status) {
-      case 'Pending':
-        return 'Pendente';
-      case 'InProgress':
-        return 'Em Andamento';
-      case 'Delivered':
-        return 'Entregue';
-      case 'Cancelled':
-        return 'Cancelada';
-      default:
-        return status;
     }
   }
 
@@ -130,27 +115,14 @@ export class DeliveriesComponent implements OnInit {
 
   getPriorityColor(priority: string): string {
     switch (priority) {
-      case 'High':
+      case 'Alta':
         return 'bg-light-error text-error';
-      case 'Medium':
+      case 'Média':
         return 'bg-light-warning text-warning';
-      case 'Low':
+      case 'Baixa':
         return 'bg-light-success text-success';
       default:
         return 'bg-light-secondary text-secondary';
-    }
-  }
-
-  getPriorityText(priority: string): string {
-    switch (priority) {
-      case 'High':
-        return 'Alta';
-      case 'Medium':
-        return 'Média';
-      case 'Low':
-        return 'Baixa';
-      default:
-        return priority;
     }
   }
 }

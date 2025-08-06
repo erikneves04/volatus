@@ -45,7 +45,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
             var allDeliveries = _deliveryRepository.Get().ToList();
             var allDrones = _droneRepository.Get().ToList();
             
-            var pendingDeliveries = allDeliveries.Where(d => d.Status == "Pending").ToList();
+            var pendingDeliveries = allDeliveries.Where(d => d.Status == "Pendente").ToList();
             if (!pendingDeliveries.Any())
             {
                 _logger.LogInformation("No pending deliveries to allocate");
@@ -53,8 +53,8 @@ public class DeliveryWorkerService : IDeliveryWorkerService
             }
 
             var availableDrones = allDrones.Where(d => 
-                d.Status == "Available" || 
-                (d.Status == "Available" && d.IsCharging && d.CurrentBattery >= 30)
+                d.Status == "Disponível" || 
+                (d.Status == "Disponível" && d.IsCharging && d.CurrentBattery >= 30)
             ).ToList();
             
             if (!availableDrones.Any())
@@ -66,9 +66,9 @@ public class DeliveryWorkerService : IDeliveryWorkerService
             int allocatedCount = 0;
 
             // Group deliveries by priority
-            var highPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "High").ToList();
-            var mediumPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Medium").ToList();
-            var lowPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Low").ToList();
+            var highPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Alta").ToList();
+            var mediumPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Média").ToList();
+            var lowPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Baixa").ToList();
 
             // Process deliveries by priority
             var prioritizedDeliveries = highPriorityDeliveries.Concat(mediumPriorityDeliveries).Concat(lowPriorityDeliveries).ToList();
@@ -80,12 +80,12 @@ public class DeliveryWorkerService : IDeliveryWorkerService
                 {
                     // Assign delivery to drone
                     delivery.DroneId = bestDrone.Id;
-                    delivery.Status = "InProgress";
+                    delivery.Status = "Em Progresso";
                     
                     // Set drone target to delivery location
                     bestDrone.TargetX = delivery.X;
                     bestDrone.TargetY = delivery.Y;
-                    bestDrone.Status = "InUse";
+                    bestDrone.Status = "Em Uso";
                     bestDrone.IsCharging = false; // Stop charging if was charging
                     
                     _deliveryRepository.Update(delivery);
@@ -111,16 +111,16 @@ public class DeliveryWorkerService : IDeliveryWorkerService
         {
             var allDrones = _droneRepository.Get().ToList();
             var activeDrones = allDrones.Where(d => 
-                d.Status == "InUse" || 
-                d.Status == "Returning" || 
-                (d.Status == "Available" && d.IsCharging)
+                d.Status == "Em Uso" || 
+                d.Status == "Retornando à base" || 
+                (d.Status == "Disponível" && d.IsCharging)
             ).ToList();
             
             int movedCount = 0;
 
             foreach (var drone in activeDrones)
             {
-                if (drone.Status == "InUse")
+                if (drone.Status == "Em Uso")
                 {
                     var reachedTarget = MoveDroneTowardsTarget(drone);
                     if (reachedTarget)
@@ -129,7 +129,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
                     }
                     movedCount++;
                 }
-                else if (drone.Status == "Returning")
+                else if (drone.Status == "Retornando à base")
                 {
                     var reachedBase = MoveDroneTowardsTarget(drone);
                     if (reachedBase)
@@ -138,7 +138,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
                     }
                     movedCount++;
                 }
-                else if (drone.Status == "Available" && drone.IsCharging && IsAtBase(drone))
+                else if (drone.Status == "Disponível" && drone.IsCharging && IsAtBase(drone))
                 {
                     ChargeDroneAtBase(drone);
                     movedCount++;
@@ -245,19 +245,19 @@ public class DeliveryWorkerService : IDeliveryWorkerService
         // Check if drone is at a delivery location
         var allDeliveries = _deliveryRepository.Get().ToList();
         var currentDelivery = allDeliveries.FirstOrDefault(d => 
-            d.DroneId == drone.Id && d.Status == "InProgress");
+            d.DroneId == drone.Id && d.Status == "Em Progresso");
         
         if (currentDelivery != null && IsAtDeliveryLocation(drone, currentDelivery))
         {
             // Complete delivery
-            currentDelivery.Status = "Delivered";
+            currentDelivery.Status = "Entregue";
             currentDelivery.DeliveredDate = DateTime.UtcNow;
             _deliveryRepository.Update(currentDelivery);
             
             // Set drone to return to base
             drone.TargetX = 0;
             drone.TargetY = 0;
-            drone.Status = "Returning";
+            drone.Status = "Retornando à base";
             _droneRepository.Update(drone);
             
             _logger.LogInformation($"Delivery {currentDelivery.Id} completed by drone {drone.Id}");
@@ -269,7 +269,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
         if (IsAtBase(drone))
         {
             // Drone returned to base
-            drone.Status = "Available";
+            drone.Status = "Disponível";
             drone.IsCharging = true;
             _droneRepository.Update(drone);
             

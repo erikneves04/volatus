@@ -54,8 +54,8 @@ import { Drone } from '../../../models/drone.model';
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
-              <mat-option value="Available">Disponível</mat-option>
-              <mat-option value="InUse">Em uso</mat-option>
+              <mat-option value="Disponível">Disponível</mat-option>
+              <mat-option value="Em Uso">Em uso</mat-option>
               <mat-option value="Maintenance">Manutenção</mat-option>
               <mat-option value="Offline">Offline</mat-option>
             </mat-select>
@@ -144,7 +144,7 @@ export class DroneFormDialogComponent implements OnInit {
       name: [this.data?.name || '', [Validators.required]],
       model: [this.data?.model || '', [Validators.required]],
       serialNumber: [this.data?.serialNumber || '', [Validators.required]],
-      status: [this.data?.status || 'Available', [Validators.required]],
+      status: [this.data?.status || 'Disponível', [Validators.required]],
       maxWeight: [this.data?.maxWeight || null, [Validators.required, Validators.min(0.1)]],
       batteryCapacity: [this.data?.batteryCapacity || null, [Validators.required, Validators.min(1)]],
       currentBattery: [this.data?.currentBattery ?? 100, [Validators.required, Validators.min(0), Validators.max(100)]],

@@ -44,9 +44,9 @@ public class DeliveryAllocationService : IDeliveryAllocationService
             int allocatedCount = 0;
 
             // Group deliveries by priority
-            var highPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "High").ToList();
-            var mediumPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Medium").ToList();
-            var lowPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Low").ToList();
+            var highPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Alta").ToList();
+            var mediumPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Média").ToList();
+            var lowPriorityDeliveries = pendingDeliveries.Where(d => d.Priority == "Baixa").ToList();
 
             // Process deliveries by priority
             var allDeliveries = highPriorityDeliveries.Concat(mediumPriorityDeliveries).Concat(lowPriorityDeliveries).ToList();
@@ -58,12 +58,12 @@ public class DeliveryAllocationService : IDeliveryAllocationService
                 {
                     // Assign delivery to drone
                     delivery.DroneId = bestDrone.Id;
-                    delivery.Status = "InProgress";
+                    delivery.Status = "Em Progresso";
                     
                     _deliveryRepository.Update(delivery);
                     
                     // Update drone status
-                    bestDrone.Status = "InUse";
+                    bestDrone.Status = "Em Uso";
                     _droneRepository.Update(bestDrone);
                     
                     allocatedCount++;
@@ -112,7 +112,7 @@ public class DeliveryAllocationService : IDeliveryAllocationService
         var suitableDrones = availableDrones.Where(d => 
             d.CurrentBattery > 20 && // Minimum battery threshold
             d.MaxWeight >= delivery.Weight &&
-            d.Status == "Available"
+            d.Status == "Disponível"
         ).ToList();
 
         if (!suitableDrones.Any()) return null;

@@ -71,7 +71,7 @@
              </th>
              <td mat-cell *matCellDef="let element">
                <span class="rounded f-w-600 p-6 p-y-4 f-s-12" [class]="getPriorityColor(element.priority)">
-                 {{ getPriorityText(element.priority) }}
+                 {{ element.priority }}
                </span>
              </td>
            </ng-container>
@@ -83,7 +83,7 @@
              </th>
              <td mat-cell *matCellDef="let element">
                <span class="rounded f-w-600 p-6 p-y-4 f-s-12" [class]="getStatusColor(element.status)">
-                 {{ getStatusText(element.status) }}
+                 {{ element.status }}
                </span>
              </td>
            </ng-container>

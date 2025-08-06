@@ -10,13 +10,13 @@ public class DroneRepository : Repository<Drone>, IDroneRepository
     
     public Task<List<Drone>> GetAvailableDronesAsync()
     {
-        var availableDrones = Get(d => d.Status == "Available");
+        var availableDrones = Get(d => d.Status == "Disponível");
         return Task.FromResult(availableDrones);
     }
     
     public Task<List<Drone>> GetActiveDronesAsync()
     {
-        var activeDrones = Get(d => d.Status == "Available" || d.Status == "InUse" || d.Status == "Returning");
+        var activeDrones = Get(d => d.Status == "Disponível" || d.Status == "Em Uso" || d.Status == "Retornando à base");
         return Task.FromResult(activeDrones);
     }
 } 
