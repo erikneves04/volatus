@@ -27,6 +27,7 @@ export interface DroneStatus {
   currentY: number;
   targetX: number;
   targetY: number;
+
 }
 
 export interface RecentDelivery {
