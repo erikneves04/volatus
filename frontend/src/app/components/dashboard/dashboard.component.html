@@ -4,16 +4,12 @@
     <mat-card class="header-card">
       <mat-card-content>
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Dashboard de Entregas</h2>
+          <h2>Volatus Logísitca - Dados das entregas</h2>
           <div class="header-actions">
-            <button 
-              mat-raised-button 
-              color="primary"
-              (click)="refreshData()"
-            >
-              <mat-icon>refresh</mat-icon>
-              Atualizar Dados
-            </button>
+            <div class="auto-refresh-indicator">
+              <mat-icon class="refresh-icon">autorenew</mat-icon>
+              <span class="refresh-text">Atualização automática ativa</span>
+            </div>
           </div>
         </div>
       </mat-card-content>
@@ -81,8 +77,8 @@
 
   <!-- Conteúdo principal -->
   <div class="main-content">
-    <!-- Mapa de Posições dos Drones -->
-    <mat-card class="detail-card">
+    <!-- Mapa de Posições dos Drones - Ocupando toda a largura -->
+    <mat-card class="detail-card map-card">
       <mat-card-header>
         <mat-card-title>Mapa de Posições dos Drones</mat-card-title>
         <mat-card-subtitle>Visualização em tempo real das posições e destinos</mat-card-subtitle>
@@ -92,29 +88,37 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Status dos Drones -->
-    <mat-card class="detail-card">
+    <!-- Status e Informações dos Drones - Seção mesclada -->
+    <mat-card class="detail-card drones-info-card">
       <mat-card-header>
-        <mat-card-title>Status dos Drones</mat-card-title>
-        <mat-card-subtitle>Informações em tempo real dos drones</mat-card-subtitle>
+        <mat-card-title>Status e Informações dos Drones</mat-card-title>
+        <mat-card-subtitle>Informações detalhadas em tempo real dos drones</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="drone-list" *ngIf="drones.length > 0; else noDrones">
-          <div class="drone-item" *ngFor="let drone of drones">
-                         <div class="drone-info">
-               <h4>{{ drone.name }}</h4>
-               <p>S/N: {{ drone.serialNumber }}</p>
-             </div>
-            <div class="drone-status">
+        <div class="drones-info-grid" *ngIf="drones.length > 0; else noDrones">
+          <div class="drone-info-item" *ngFor="let drone of drones">
+            <div class="drone-main-info">
+              <div class="drone-header">
+                <h4>{{ drone.name }}</h4>
+                <p class="serial-number">S/N: {{ drone.serialNumber }}</p>
+              </div>
+              <div class="drone-position-info">
+                <p><strong>Posição Atual:</strong> ({{ drone.currentX }}, {{ drone.currentY }})</p>
+                <p><strong>Destino:</strong> ({{ drone.targetX }}, {{ drone.targetY }})</p>
+              </div>
+            </div>
+            <div class="drone-status-info">
               <mat-chip [color]="getStatusColor(drone.status)" selected>
                 {{ getStatusLabel(drone.status) }}
               </mat-chip>
-              <mat-progress-bar 
-                mode="determinate" 
-                [value]="drone.batteryLevel"
-                [color]="drone.batteryLevel < 20 ? 'warn' : 'primary'"
-              ></mat-progress-bar>
-              <span class="battery-text">{{ drone.batteryLevel }}%</span>
+              <div class="progress-section">
+                <mat-progress-bar 
+                  mode="determinate" 
+                  [value]="drone.batteryLevel"
+                  [color]="drone.batteryLevel < 20 ? 'warn' : 'primary'"
+                ></mat-progress-bar>
+                <span class="battery-text">{{ drone.batteryLevel }}%</span>
+              </div>
             </div>
           </div>
         </div>

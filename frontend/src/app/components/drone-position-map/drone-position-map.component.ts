@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -17,12 +17,13 @@ import { DroneStatus } from '../../services/dashboard.service';
   templateUrl: './drone-position-map.component.html',
   styleUrls: ['./drone-position-map.component.scss']
 })
-export class DronePositionMapComponent implements OnInit {
+export class DronePositionMapComponent implements OnInit, OnChanges {
   @Input() drones: DroneStatus[] = [];
   
   // Configurações da matriz
-  readonly gridSize = 20; // 20x20 grid
-  readonly cellSize = 30; // 30px por célula
+  readonly gridHeight = 40; // Altura
+  readonly gridWidth = 120; // Largura
+  readonly cellSize = 15; // Reduzindo o tamanho da célula para caber melhor na tela
   
   grid: any[][] = [];
   
@@ -31,15 +32,17 @@ export class DronePositionMapComponent implements OnInit {
     this.updateDronePositions();
   }
   
-  ngOnChanges(): void {
-    this.updateDronePositions();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['drones']) {
+      this.updateDronePositions();
+    }
   }
   
   private initializeGrid(): void {
     this.grid = [];
-    for (let i = 0; i < this.gridSize; i++) {
+    for (let i = 0; i < this.gridHeight; i++) {
       this.grid[i] = [];
-      for (let j = 0; j < this.gridSize; j++) {
+      for (let j = 0; j < this.gridWidth; j++) {
         this.grid[i][j] = { type: 'empty', drone: null };
       }
     }
@@ -49,8 +52,8 @@ export class DronePositionMapComponent implements OnInit {
     this.initializeGrid();
     
     // Marcar a base na posição central (0,0)
-    const baseGridX = Math.floor((0 + 10) * (this.gridSize - 1) / 20);
-    const baseGridY = Math.floor((0 + 10) * (this.gridSize - 1) / 20);
+    const baseGridX = Math.floor((0 + 10) * (this.gridWidth - 1) / 20);
+    const baseGridY = Math.floor((0 + 10) * (this.gridHeight - 1) / 20);
     this.grid[baseGridY][baseGridX] = {
       type: 'base',
       drone: null
@@ -58,16 +61,16 @@ export class DronePositionMapComponent implements OnInit {
     
     this.drones.forEach(drone => {
       // Converter coordenadas para posições na grade
-      const currentGridX = Math.floor((drone.currentX + 10) * (this.gridSize - 1) / 20);
-      const currentGridY = Math.floor((drone.currentY + 10) * (this.gridSize - 1) / 20);
-      const targetGridX = Math.floor((drone.targetX + 10) * (this.gridSize - 1) / 20);
-      const targetGridY = Math.floor((drone.targetY + 10) * (this.gridSize - 1) / 20);
+      const currentGridX = Math.floor((drone.currentX + 10) * (this.gridWidth - 1) / 20);
+      const currentGridY = Math.floor((drone.currentY + 10) * (this.gridHeight - 1) / 20);
+      const targetGridX = Math.floor((drone.targetX + 10) * (this.gridWidth - 1) / 20);
+      const targetGridY = Math.floor((drone.targetY + 10) * (this.gridHeight - 1) / 20);
       
       // Garantir que as posições estejam dentro dos limites
-      const safeCurrentX = Math.max(0, Math.min(this.gridSize - 1, currentGridX));
-      const safeCurrentY = Math.max(0, Math.min(this.gridSize - 1, currentGridY));
-      const safeTargetX = Math.max(0, Math.min(this.gridSize - 1, targetGridX));
-      const safeTargetY = Math.max(0, Math.min(this.gridSize - 1, targetGridY));
+      const safeCurrentX = Math.max(0, Math.min(this.gridWidth - 1, currentGridX));
+      const safeCurrentY = Math.max(0, Math.min(this.gridHeight - 1, currentGridY));
+      const safeTargetX = Math.max(0, Math.min(this.gridWidth - 1, targetGridX));
+      const safeTargetY = Math.max(0, Math.min(this.gridHeight - 1, targetGridY));
       
       // Marcar posição atual do drone (se não for a base)
       if (safeCurrentX !== baseGridX || safeCurrentY !== baseGridY) {

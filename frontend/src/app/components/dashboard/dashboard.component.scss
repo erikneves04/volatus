@@ -16,6 +16,38 @@
 .header-actions {
   display: flex;
   gap: 10px;
+  align-items: center;
+}
+
+.auto-refresh-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: white;
+}
+
+.refresh-icon {
+  animation: spin 2s linear infinite;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.refresh-text {
+  font-weight: 500;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .metrics-grid {
@@ -77,13 +109,94 @@
 }
 
 .main-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
 .detail-card {
   height: fit-content;
+}
+
+/* Mapa ocupando toda a largura */
+.map-card {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+/* Seção mesclada de informações dos drones */
+.drones-info-card {
+  width: 100%;
+}
+
+.drones-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.drone-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+  transition: background-color 0.2s;
+}
+
+.drone-info-item:hover {
+  background: #f0f0f0;
+}
+
+.drone-main-info {
+  flex: 1;
+}
+
+.drone-header h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.serial-number {
+  margin: 0 0 15px 0;
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.drone-position-info p {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.drone-position-info p strong {
+  color: #333;
+}
+
+.drone-status-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 120px;
+}
+
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  width: 100%;
+}
+
+.battery-text {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
 }
 
 .drone-list, .deliveries-list {
@@ -175,7 +288,25 @@
 
 @media (max-width: 768px) {
   .main-content {
+    flex-direction: column;
+  }
+  
+  .drones-info-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .drone-info-item {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .drone-status-info {
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .progress-section {
+    align-items: flex-start;
   }
   
   .metrics-grid {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ import { DronePositionMapComponent } from '../drone-position-map/drone-position-
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   // Dados que virão do backend
   drones: DroneStatus[] = [];
   recentDeliveries: RecentDelivery[] = [];
@@ -39,11 +39,35 @@ export class DashboardComponent implements OnInit {
     successRate: 0
   };
 
+  private autoRefreshTimer: any;
+  private readonly REFRESH_INTERVAL = 3000; // 3 segundos
+
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
     // Aqui será feita a conexão com o backend
     this.loadDashboardData();
+    
+    // Iniciar atualização automática a cada 3 segundos
+    this.startAutoRefresh();
+  }
+
+  ngOnDestroy(): void {
+    // Limpar o timer quando o componente for destruído
+    this.stopAutoRefresh();
+  }
+
+  startAutoRefresh(): void {
+    this.autoRefreshTimer = setInterval(() => {
+      this.loadDashboardData();
+    }, this.REFRESH_INTERVAL);
+  }
+
+  stopAutoRefresh(): void {
+    if (this.autoRefreshTimer) {
+      clearInterval(this.autoRefreshTimer);
+      this.autoRefreshTimer = null;
+    }
   }
 
   loadDashboardData(): void {
