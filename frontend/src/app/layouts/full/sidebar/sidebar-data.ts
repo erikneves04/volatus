@@ -5,9 +5,14 @@ export const navItems: NavItem[] = [
     navCap: 'Inicio',
   },
   {
-    displayName: 'Dashboard',
+    displayName: 'Dashboard - Estatísticas',
     iconName: 'layout-grid-add',
-    route: '/dashboard',
+    route: '/dashboard-stats',
+  },
+  {
+    displayName: 'Dashboard - Mapa',
+    iconName: 'map',
+    route: '/dashboard-map',
   },
   {
     navCap: 'Gerenciamento',

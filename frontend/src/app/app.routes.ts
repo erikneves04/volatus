@@ -3,6 +3,8 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { FullComponent } from './layouts/full/full.component';
 import { DeliveriesComponent } from './components/deliveries/deliveries.component';
 import { DronesComponent } from './components/drones/drones.component';
+import { DashboardStatsComponent } from './components/dashboard-stats/dashboard-stats.component';
+import { DashboardMapComponent } from './components/dashboard-map/dashboard-map.component';
 
 export const routes: Routes = [
   {
@@ -11,13 +13,16 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/dashboard',
+        redirectTo: '/dashboard-stats',
         pathMatch: 'full',
       },
       {
-        path: 'dashboard',
-        loadChildren: () =>
-          import('./pages/pages.routes').then((m) => m.PagesRoutes),
+        path: 'dashboard-stats',
+        component: DashboardStatsComponent
+      },
+      {
+        path: 'dashboard-map',
+        component: DashboardMapComponent
       },
       {
         path: 'deliveries',

@@ -10,7 +10,7 @@ import { MaterialModule } from 'src/app/material.module';
 import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, RecentEvent } from '../../services/dashboard.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-dashboard-stats',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,10 +22,10 @@ import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, Recent
     MatChipsModule,
     MaterialModule
   ],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  templateUrl: './dashboard-stats.component.html',
+  styleUrls: ['./dashboard-stats.component.scss']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardStatsComponent implements OnInit, OnDestroy {
   // Dados que virão do backend
   drones: DroneStatus[] = [];
   recentDeliveries: RecentDelivery[] = [];

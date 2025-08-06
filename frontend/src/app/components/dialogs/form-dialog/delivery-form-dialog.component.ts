@@ -22,12 +22,12 @@ function coordinateRangeValidator(control: AbstractControl): ValidationErrors | 
   const x = parseInt(match[1]);
   const y = parseInt(match[2]);
 
-  // Validar range: x deve estar entre 0 e 119 (120 colunas), y deve estar entre 0 e 39 (40 linhas)
-  if (x < 0 || x >= 120) {
-    return { xOutOfRange: { value: x, min: 0, max: 119 } };
+  // Validar range: x deve estar entre 0 e 39 (40 colunas), y deve estar entre 0 e 24 (25 linhas)
+  if (x < 0 || x >= 40) {
+    return { xOutOfRange: { value: x, min: 0, max: 39 } };
   }
-  if (y < 0 || y >= 40) {
-    return { yOutOfRange: { value: y, min: 0, max: 39 } };
+  if (y < 0 || y >= 25) {
+    return { yOutOfRange: { value: y, min: 0, max: 24 } };
   }
 
   return null;
@@ -69,12 +69,12 @@ function coordinateRangeValidator(control: AbstractControl): ValidationErrors | 
               Formato inválido. Use (x, y)
             </mat-error>
             <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('xOutOfRange')">
-              Coordenada X deve estar entre 0 e 119 (range atual: 40x120)
+              Coordenada X deve estar entre 0 e 39 (range atual: 25x40)
             </mat-error>
             <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('yOutOfRange')">
-              Coordenada Y deve estar entre 0 e 39 (range atual: 40x120)
+              Coordenada Y deve estar entre 0 e 24 (range atual: 25x40)
             </mat-error>
-            <mat-hint>Range válido: X (0-119), Y (0-39) - Digite números e será formatado automaticamente</mat-hint>
+            <mat-hint>Range válido: X (0-39), Y (0-24) - Digite números e será formatado automaticamente</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
@@ -217,8 +217,8 @@ export class DeliveryFormDialogComponent implements OnInit {
       const y = parseInt(numbers[1]);
       
       // Aplicar limites
-      const limitedX = Math.max(0, Math.min(119, x));
-      const limitedY = Math.max(0, Math.min(39, y));
+      const limitedX = Math.max(0, Math.min(39, x));
+      const limitedY = Math.max(0, Math.min(24, y));
       
       // Formatar
       const formattedValue = `(${limitedX}, ${limitedY})`;

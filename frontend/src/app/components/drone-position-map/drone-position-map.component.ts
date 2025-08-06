@@ -21,9 +21,9 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
   @Input() drones: DroneStatus[] = [];
   
   // Configurações da matriz
-  readonly gridHeight = 40; // Altura
-  readonly gridWidth = 120; // Largura
-  readonly cellSize = 15; // Reduzindo o tamanho da célula para caber melhor na tela
+  readonly gridHeight = 25; // Altura ainda mais reduzida
+  readonly gridWidth = 40; // Largura reduzida para melhor proporção
+  readonly cellSize = 25; // Aumentando o tamanho da célula para melhor visualização
   
   grid: any[][] = [];
   

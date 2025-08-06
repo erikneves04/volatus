@@ -47,7 +47,9 @@
     margin-bottom: 1rem;
     overflow: auto;
     max-width: 100%;
-    max-height: 80vh;
+    max-height: 65vh;
+    padding: 1rem;
+    min-height: 400px;
     
     .grid-container {
       border: 2px solid #ddd;
@@ -58,13 +60,14 @@
       max-height: 100%;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       
       .grid-row {
         display: flex;
         
         .grid-cell {
-          width: 15px;
-          height: 15px;
+          width: 25px;
+          height: 25px;
           border: 1px solid #e0e0e0;
           display: flex;
           align-items: center;
@@ -73,7 +76,7 @@
           transition: all 0.2s ease;
           
           &.base-cell {
-            background-color: rgba(76, 175, 80, 0.1);
+            background-color: rgba(76, 175, 80, 0.3);
             border-color: #4caf50;
             
             .base-icon {
@@ -85,7 +88,7 @@
           }
           
           &.drone-cell {
-            background-color: rgba(25, 118, 210, 0.1);
+            background-color: rgba(25, 118, 210, 0.3);
             border-color: #1976d2;
             
             .drone-icon {
@@ -96,7 +99,7 @@
           }
           
           &.target-cell {
-            background-color: rgba(245, 124, 0, 0.1);
+            background-color: rgba(245, 124, 0, 0.3);
             border-color: #f57c00;
             
             .target-icon {
@@ -202,7 +205,7 @@
   .drone-position-map {
     .map-container {
       .grid-container {
-        transform: scale(0.8);
+        transform: scale(1);
         transform-origin: center;
       }
     }
@@ -213,7 +216,7 @@
   .drone-position-map {
     .map-container {
       .grid-container {
-        transform: scale(0.6);
+        transform: scale(0.9);
         transform-origin: center;
       }
     }
@@ -224,7 +227,7 @@
   .drone-position-map {
     .map-container {
       .grid-container {
-        transform: scale(0.4);
+        transform: scale(0.8);
         transform-origin: center;
       }
     }
@@ -241,7 +244,7 @@
     
     .map-container {
       .grid-container {
-        transform: scale(0.25);
+        transform: scale(0.6);
         transform-origin: center;
         max-height: 60vh;
       }
@@ -270,7 +273,7 @@
   .drone-position-map {
     .map-container {
       .grid-container {
-        transform: scale(0.15);
+        transform: scale(0.4);
         transform-origin: center;
         max-height: 50vh;
       }
