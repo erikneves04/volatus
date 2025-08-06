@@ -100,7 +100,7 @@ function coordinateRangeValidator(control: AbstractControl): ValidationErrors | 
              <mat-label>Status</mat-label>
              <mat-select formControlName="status">
                <mat-option value="Pendente">Pendente</mat-option>
-               <mat-option value="Em Progresso">Em Progresso</mat-option>
+               <mat-option value="Em Andamento">Em Andamento</mat-option>
                <mat-option value="Entregue">Entregue</mat-option>
                <mat-option value="Cancelado">Cancelado</mat-option>
              </mat-select>

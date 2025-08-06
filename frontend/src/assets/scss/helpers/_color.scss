@@ -18,6 +18,7 @@
   $success: $success,
   $warning: $warning,
   $error: var(--mat-sys-error),
+  $info: var(--mat-sys-primary),
   $white: $white,
   $light: $light,
   $dark: $dark,
@@ -25,6 +26,7 @@
   $light-secondary: var(--mat-sys-secondary-fixed-dim),
   $light-success: $light-success,
   $light-warning: $light-warning,
+  $light-info: var(--mat-sys-primary-fixed-dim),
   $light-primary: var(--mat-sys-primary-fixed-dim));
 
 .fill-warning svg {

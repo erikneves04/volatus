@@ -98,7 +98,7 @@ export class DeliveriesComponent implements OnInit {
     switch (status) {
       case 'Pendente':
         return 'bg-light-warning text-warning';
-      case 'Em Progresso':
+      case 'Em Andamento':
         return 'bg-light-info text-info';
       case 'Entregue':
         return 'bg-light-success text-success';

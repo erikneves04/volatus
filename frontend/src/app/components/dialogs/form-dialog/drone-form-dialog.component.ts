@@ -55,8 +55,8 @@ import { Drone } from '../../../models/drone.model';
             <mat-label>Status</mat-label>
             <mat-select formControlName="status">
               <mat-option value="Disponível">Disponível</mat-option>
-              <mat-option value="Em Uso">Em uso</mat-option>
-              <mat-option value="Maintenance">Manutenção</mat-option>
+              <mat-option value="Em Uso">Em Uso</mat-option>
+              <mat-option value="Manutenção">Manutenção</mat-option>
               <mat-option value="Offline">Offline</mat-option>
             </mat-select>
             <mat-error *ngIf="droneForm.get('status')?.hasError('required')">

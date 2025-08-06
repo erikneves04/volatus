@@ -137,8 +137,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const labels: { [key: string]: string } = {
       'pending': 'Pendente',
       'in-progress': 'Em Andamento',
-      'completed': 'Concluída',
-      'failed': 'Falhou'
+      'completed': 'Entregue',
+      'failed': 'Cancelado'
     };
     return labels[status] || status;
   }
