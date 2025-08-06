@@ -10,19 +10,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MaterialModule } from 'src/app/material.module';
 import { Delivery } from '../../../models/delivery.model';
 
-// Validador customizado para coordenadas
 function coordinateRangeValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;
   if (!value) return null;
 
-  // Extrair coordenadas do formato "(x, y)"
   const match = value.match(/^\((-?\d+),\s*(-?\d+)\)$/);
   if (!match) return null;
 
   const x = parseInt(match[1]);
   const y = parseInt(match[2]);
 
-  // Validar range: x deve estar entre 0 e 39 (40 colunas), y deve estar entre 0 e 24 (25 linhas)
   if (x < 0 || x >= 40) {
     return { xOutOfRange: { value: x, min: 0, max: 39 } };
   }
@@ -203,24 +200,19 @@ export class DeliveryFormDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  // Helper para formatar coordenadas
   formatCoordinates(event: any): void {
     let value = event.target.value;
     
-    // Remover caracteres não numéricos exceto parênteses, vírgula e espaços
     value = value.replace(/[^0-9(),\s-]/g, '');
     
-    // Tentar extrair números
     const numbers = value.match(/-?\d+/g);
     if (numbers && numbers.length >= 2) {
       const x = parseInt(numbers[0]);
       const y = parseInt(numbers[1]);
       
-      // Aplicar limites
       const limitedX = Math.max(0, Math.min(39, x));
       const limitedY = Math.max(0, Math.min(24, y));
-      
-      // Formatar
+
       const formattedValue = `(${limitedX}, ${limitedY})`;
       this.deliveryForm.patchValue({ customerAddress: formattedValue });
     }

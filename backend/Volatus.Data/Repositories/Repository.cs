@@ -86,7 +86,6 @@ public class Repository<Entity> : IRepository<Entity>
     
     private static IQueryable<Entity> PaginateQuery(IQueryable<Entity> query, PaginationParams @params, Expression<Func<Entity, IComparable>> orderBy = null)
     {
-        // Apply ordering first if orderBy is not null
         if (orderBy != null)
         {
             if (@params.SortDirection == "desc")

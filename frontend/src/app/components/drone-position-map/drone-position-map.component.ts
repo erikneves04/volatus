@@ -70,14 +70,14 @@ export class DronePositionMapComponent implements OnInit, OnChanges {
   getXLabelPosition(index: number): number {
     // Calcular posição baseada no índice e largura da célula
     const position = (index * 5) * this.cellSize;
-    return Math.max(0, position - 10); // Ajuste para centralizar o label
+    return Math.max(0, position - 15); // Ajuste para centralizar o label
   }
   
   getYLabelPosition(index: number): number {
     // Calcular posição baseada no índice e altura da célula
     // Labels de baixo para cima: 0 na base, 25 no topo
     const position = (this.gridHeight - 1 - (index * 5)) * this.cellSize;
-    return Math.max(0, position - 10); // Ajuste para centralizar o label
+    return Math.max(0, position - 12); // Ajuste para centralizar o label
   }
   
   private updateDronePositions(): void {

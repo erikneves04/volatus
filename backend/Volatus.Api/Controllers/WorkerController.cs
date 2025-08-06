@@ -23,10 +23,6 @@ public class WorkerController : ControllerBase
         _logger = logger;
     }
 
-    /// <summary>
-    /// Executes the delivery system worker
-    /// </summary>
-    /// <returns>Summary of operations performed</returns>
     [HttpPost("process-deliveries")]
     public async Task<IActionResult> ProcessDeliveries()
     {
@@ -42,10 +38,6 @@ public class WorkerController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Allocates pending deliveries to available drones
-    /// </summary>
-    /// <returns>Number of deliveries allocated</returns>
     [HttpPost("allocate-deliveries")]
     public IActionResult AllocateDeliveries()
     {
@@ -61,10 +53,6 @@ public class WorkerController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Updates drone positions and handles delivery completion
-    /// </summary>
-    /// <returns>Number of drones moved</returns>
     [HttpPost("update-drone-positions")]
     public IActionResult UpdateDronePositions()
     {
@@ -80,13 +68,6 @@ public class WorkerController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// Calculates optimal route for deliveries
-    /// </summary>
-    /// <param name="deliveries">List of delivery coordinates</param>
-    /// <param name="startX">Starting X coordinate</param>
-    /// <param name="startY">Starting Y coordinate</param>
-    /// <returns>Optimal route</returns>
     [HttpPost("calculate-route")]
     public IActionResult CalculateRoute([FromBody] RouteCalculationRequest request)
     {
