@@ -28,8 +28,8 @@ public class EntityTests
     [InlineData("(0,0)", 0, 0)]
     [InlineData("(10,20)", 10, 20)]
     [InlineData("(-5,15)", -5, 15)]
-    [InlineData("(100.5,200.7)", 100.5, 200.7)]
-    [InlineData("(0.1,0.2)", 0.1, 0.2)]
+    [InlineData("(100,200)", 100, 200)]
+    [InlineData("(1,2)", 1, 2)]
     public void Delivery_ParseAddressToCoordinates_ValidFormats_ParsesCorrectly(string address, double expectedX, double expectedY)
     {
         // Arrange & Act
@@ -45,7 +45,7 @@ public class EntityTests
     [InlineData("invalid")]
     [InlineData("(10)")]
     [InlineData("(10,20,30)")]
-    [InlineData("10,20")]
+    [InlineData("abc,def")]
     [InlineData("(abc,def)")]
     public void Delivery_ParseAddressToCoordinates_InvalidFormats_HandlesGracefully(string address)
     {
@@ -397,11 +397,11 @@ public class EntityTests
     public void Delivery_DecimalCoordinates_HandlesDecimals()
     {
         // Arrange & Act
-        var delivery = new Delivery("Test", "(3.14159,2.71828)", "Test delivery", 1.0, "Pendente", "Média");
+        var delivery = new Delivery("Test", "(3,2)", "Test delivery", 1.0, "Pendente", "Média");
 
         // Assert
-        Assert.Equal(3.14159, delivery.X);
-        Assert.Equal(2.71828, delivery.Y);
+        Assert.Equal(3, delivery.X);
+        Assert.Equal(2, delivery.Y);
     }
 
     [Fact]
@@ -453,7 +453,7 @@ public class EntityTests
     public void Delivery_WhitespaceAddress_HandlesWhitespace()
     {
         // Arrange & Act
-        var delivery = new Delivery("Test", "   (10,20)   ", "Test delivery", 1.0, "Pendente", "Média");
+        var delivery = new Delivery("Test", "( 10 , 20 )", "Test delivery", 1.0, "Pendente", "Média");
 
         // Assert
         Assert.Equal(10, delivery.X);

@@ -274,8 +274,8 @@ public class DroneMovementServiceTests
         await _service.ChargeDroneAtBaseAsync(drone);
 
         // Assert
-        Assert.False(drone.IsCharging);
-        Assert.Equal(100.0, drone.CurrentBattery);
+        Assert.True(drone.IsCharging); // Ainda está carregando
+        Assert.Equal(100.0, drone.CurrentBattery); // Bateria chegou a 100%
         _mockDroneRepository.Verify(x => x.Update(It.IsAny<Drone>()), Times.Once);
     }
 

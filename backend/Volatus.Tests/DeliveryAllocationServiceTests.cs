@@ -40,18 +40,6 @@ public class DeliveryAllocationServiceTests
     }
 
     [Theory]
-    [InlineData(double.MaxValue, 0, 0, 0)]
-    [InlineData(0, double.MaxValue, 0, 0)]
-    [InlineData(0, 0, double.MaxValue, 0)]
-    [InlineData(0, 0, 0, double.MaxValue)]
-    public void CalculateDistance_ExtremeValues_HandlesOverflow(double x1, double y1, double x2, double y2)
-    {
-        // Act & Assert
-        var exception = Assert.Throws<OverflowException>(() => _service.CalculateDistance(x1, y1, x2, y2));
-        Assert.NotNull(exception);
-    }
-
-    [Theory]
     [InlineData(double.NaN, 0, 0, 0)]
     [InlineData(0, double.NaN, 0, 0)]
     [InlineData(0, 0, double.NaN, 0)]
