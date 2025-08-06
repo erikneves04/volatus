@@ -115,7 +115,7 @@ public class DeliveryServices : IDeliveryServices
     public DashboardMetricsViewModel GetDashboardMetrics()
     {
         var allDeliveries = _repository.Query().ToList();
-        var completedDeliveries = allDeliveries.Where(d => d.Status == "Completed").ToList();
+        var completedDeliveries = allDeliveries.Where(d => d.Status == "Delivered").ToList();
         
         var totalDeliveries = allDeliveries.Count;
         var completedCount = completedDeliveries.Count;
