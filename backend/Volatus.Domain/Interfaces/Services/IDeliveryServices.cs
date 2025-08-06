@@ -10,4 +10,6 @@ public interface IDeliveryServices
     DeliveryViewModel Update(DeliveryUpdateViewModel model, Guid id);
     void Delete(Guid id);
     DeliveryViewModel AssignDrone(DeliveryAssignmentViewModel model);
+    DashboardMetricsViewModel GetDashboardMetrics();
+    IEnumerable<DeliveryViewModel> GetRecentDeliveries(int count);
 } 

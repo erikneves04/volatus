@@ -7,4 +7,16 @@ namespace Volatus.Data.Repositories;
 public class DroneRepository : Repository<Drone>, IDroneRepository
 {
     public DroneRepository(AppDbContext context) : base(context) { }
+    
+    public Task<List<Drone>> GetAvailableDronesAsync()
+    {
+        var availableDrones = Get(d => d.Status == "Available");
+        return Task.FromResult(availableDrones);
+    }
+    
+    public Task<List<Drone>> GetActiveDronesAsync()
+    {
+        var activeDrones = Get(d => d.Status == "Available" || d.Status == "InUse" || d.Status == "Returning");
+        return Task.FromResult(activeDrones);
+    }
 } 

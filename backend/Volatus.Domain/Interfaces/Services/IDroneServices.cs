@@ -9,4 +9,5 @@ public interface IDroneServices
     DroneViewModel Insert(DroneInsertViewModel model);
     DroneViewModel Update(DroneUpdateViewModel model, Guid id);
     void Delete(Guid id);
+    IEnumerable<DroneStatusViewModel> GetDroneStatus();
 } 

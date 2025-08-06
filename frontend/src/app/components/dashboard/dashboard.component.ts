@@ -7,8 +7,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MaterialModule } from 'src/app/material.module';
-import { EventService } from '../../services/event.service';
-import { Event } from '../../models/event.model';
+import { DashboardService, DashboardMetrics, DroneStatus, RecentDelivery, RecentEvent } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,17 +27,17 @@ import { Event } from '../../models/event.model';
 })
 export class DashboardComponent implements OnInit {
   // Dados que virão do backend
-  drones: any[] = [];
-  recentDeliveries: any[] = [];
-  events: Event[] = [];
-  metrics: any = {
+  drones: DroneStatus[] = [];
+  recentDeliveries: RecentDelivery[] = [];
+  events: RecentEvent[] = [];
+  metrics: DashboardMetrics = {
     totalDeliveries: 0,
     completedDeliveries: 0,
-    averageDeliveryTime: 0,
-    deliverySuccessRate: 0
+    averageDeliveryTimeSeconds: 0,
+    successRate: 0
   };
 
-  constructor(private eventService: EventService) {}
+  constructor(private dashboardService: DashboardService) {}
 
   ngOnInit(): void {
     // Aqui será feita a conexão com o backend
@@ -46,27 +45,32 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-    // TODO: Implementar chamadas para o backend
-    // this.dashboardService.getDrones().subscribe(drones => this.drones = drones);
-    // this.dashboardService.getDeliveries().subscribe(deliveries => this.recentDeliveries = deliveries);
-    this.eventService.getRecentEvents(10).subscribe(events => this.events = events);
-    // this.dashboardService.getMetrics().subscribe(metrics => this.metrics = metrics);
+    // Carregar métricas do dashboard
+    this.dashboardService.getMetrics().subscribe(metrics => this.metrics = metrics);
+    
+    // Carregar status dos drones
+    this.dashboardService.getDroneStatus().subscribe(drones => this.drones = drones);
+    
+    // Carregar entregas recentes
+    this.dashboardService.getRecentDeliveries(5).subscribe(deliveries => this.recentDeliveries = deliveries);
+    
+    // Carregar eventos recentes
+    this.dashboardService.getRecentEvents(10).subscribe(events => this.events = events);
   }
 
   refreshData(): void {
     this.loadDashboardData();
   }
 
-  formatTime(milliseconds: number): string {
-    if (milliseconds === 0) return '0s';
-    const seconds = Math.floor(milliseconds / 1000);
+  formatTime(seconds: number): string {
+    if (seconds === 0) return '0s';
     const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
+    const remainingSeconds = Math.floor(seconds % 60);
     
     if (minutes > 0) {
       return `${minutes}m ${remainingSeconds}s`;
     }
-    return `${seconds}s`;
+    return `${Math.floor(seconds)}s`;
   }
 
   formatEventTime(timestamp: string): string {

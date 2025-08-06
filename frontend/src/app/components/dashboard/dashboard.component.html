@@ -57,7 +57,7 @@
             <mat-icon>schedule</mat-icon>
           </div>
           <div class="metric-content">
-            <h3>{{ formatTime(metrics.averageDeliveryTime) }}</h3>
+            <h3>{{ formatTime(metrics.averageDeliveryTimeSeconds) }}</h3>
             <p>Tempo Médio por Entrega</p>
           </div>
         </div>
@@ -71,7 +71,7 @@
             <mat-icon>trending_up</mat-icon>
           </div>
           <div class="metric-content">
-            <h3>{{ metrics.deliverySuccessRate.toFixed(1) }}%</h3>
+            <h3>{{ metrics.successRate.toFixed(1) }}%</h3>
             <p>Taxa de Sucesso</p>
           </div>
         </div>
@@ -90,21 +90,20 @@
       <mat-card-content>
         <div class="drone-list" *ngIf="drones.length > 0; else noDrones">
           <div class="drone-item" *ngFor="let drone of drones">
-            <div class="drone-info">
-              <h4>{{ drone.name }}</h4>
-              <p>Posição: ({{ drone.currentPosition.x.toFixed(1) }}, {{ drone.currentPosition.y.toFixed(1) }})</p>
-              <p>Entregas: {{ drone.totalDeliveries }} | Distância: {{ drone.totalDistance.toFixed(1) }}km</p>
-            </div>
+                         <div class="drone-info">
+               <h4>{{ drone.name }}</h4>
+               <p>S/N: {{ drone.serialNumber }}</p>
+             </div>
             <div class="drone-status">
               <mat-chip [color]="getStatusColor(drone.status)" selected>
                 {{ getStatusLabel(drone.status) }}
               </mat-chip>
               <mat-progress-bar 
                 mode="determinate" 
-                [value]="drone.battery"
-                [color]="drone.battery < 20 ? 'warn' : 'primary'"
+                [value]="drone.batteryLevel"
+                [color]="drone.batteryLevel < 20 ? 'warn' : 'primary'"
               ></mat-progress-bar>
-              <span class="battery-text">{{ drone.battery }}%</span>
+              <span class="battery-text">{{ drone.batteryLevel }}%</span>
             </div>
           </div>
         </div>
@@ -127,15 +126,16 @@
         <div class="deliveries-list" *ngIf="recentDeliveries.length > 0; else noDeliveries">
           <div class="delivery-item" *ngFor="let delivery of recentDeliveries">
             <div class="delivery-info">
-              <h4>Entrega #{{ delivery.id }}</h4>
-              <p>De: ({{ delivery.origin.x.toFixed(1) }}, {{ delivery.origin.y.toFixed(1) }})</p>
-              <p>Para: ({{ delivery.destination.x.toFixed(1) }}, {{ delivery.destination.y.toFixed(1) }})</p>
+              <h4>{{ delivery.customerName }}</h4>
+              <p>{{ delivery.customerAddress }}</p>
+              <p>{{ delivery.description }}</p>
+              <p>Peso: {{ delivery.weight }}kg | Prioridade: {{ delivery.priority }}</p>
             </div>
             <div class="delivery-status">
               <mat-chip [color]="getDeliveryStatusColor(delivery.status)" selected>
                 {{ getDeliveryStatusLabel(delivery.status) }}
               </mat-chip>
-              <span class="delivery-time">{{ formatTime(delivery.deliveryTime) }}</span>
+              <span class="delivery-time">{{ formatEventTime(delivery.createdAt) }}</span>
             </div>
           </div>
         </div>
