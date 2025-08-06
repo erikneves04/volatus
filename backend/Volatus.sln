@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volatus.Domain", "Volatus.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volatus.Data", "Volatus.Data\Volatus.Data.csproj", "{AB17C203-E1C5-4234-BC14-32B63F60067A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volatus.Tests", "Volatus.Tests\Volatus.Tests.csproj", "{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{AB17C203-E1C5-4234-BC14-32B63F60067A}.Release|x64.Build.0 = Release|Any CPU
 		{AB17C203-E1C5-4234-BC14-32B63F60067A}.Release|x86.ActiveCfg = Release|Any CPU
 		{AB17C203-E1C5-4234-BC14-32B63F60067A}.Release|x86.Build.0 = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|x64.Build.0 = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Debug|x86.Build.0 = Debug|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|x64.ActiveCfg = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|x64.Build.0 = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|x86.ActiveCfg = Release|Any CPU
+		{D3DED1DE-DD3C-4A56-BF1B-8FB1CDA6C4B4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
