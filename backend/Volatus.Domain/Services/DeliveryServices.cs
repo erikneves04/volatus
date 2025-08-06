@@ -100,7 +100,6 @@ public class DeliveryServices : IDeliveryServices
         drone.Status = "Em Uso";
         _droneRepository.Update(drone);
 
-        // Criar evento
         _eventServices.CreateEvent("Drone Alocado", $"Drone '{drone.Name}' foi alocado para entrega de '{delivery.CustomerName}'.");
 
         return ConvertToViewModel(Get(delivery.Id));
