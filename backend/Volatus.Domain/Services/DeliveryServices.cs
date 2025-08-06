@@ -143,6 +143,7 @@ public class DeliveryServices : IDeliveryServices
     public IEnumerable<DeliveryViewModel> GetRecentDeliveries(int count)
     {
         var recentDeliveries = _repository.Query()
+            .Where(d => d.Status == "Delivered" || d.Status == "InProgress")
             .OrderByDescending(d => d.CreatedAt)
             .Take(count)
             .ToList();
