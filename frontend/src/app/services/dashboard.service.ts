@@ -21,6 +21,13 @@ export interface DroneStatus {
   status: string;
   batteryLevel: number;
   lastUpdate: string;
+  
+  // Position properties
+  currentX: number;
+  currentY: number;
+  targetX: number;
+  targetY: number;
+
 }
 
 export interface RecentDelivery {

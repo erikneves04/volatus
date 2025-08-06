@@ -4,6 +4,8 @@ using Volatus.Api.Response;
 using Volatus.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using Volatus.Domain.Entities;
+using System;
 
 namespace Volatus.Api.Controllers;
 

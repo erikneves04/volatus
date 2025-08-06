@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,29 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { MaterialModule } from 'src/app/material.module';
 import { Delivery } from '../../../models/delivery.model';
+
+// Validador customizado para coordenadas
+function coordinateRangeValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  if (!value) return null;
+
+  // Extrair coordenadas do formato "(x, y)"
+  const match = value.match(/^\((-?\d+),\s*(-?\d+)\)$/);
+  if (!match) return null;
+
+  const x = parseInt(match[1]);
+  const y = parseInt(match[2]);
+
+  // Validar range: x deve estar entre 0 e 39 (40 colunas), y deve estar entre 0 e 24 (25 linhas)
+  if (x < 0 || x >= 40) {
+    return { xOutOfRange: { value: x, min: 0, max: 39 } };
+  }
+  if (y < 0 || y >= 25) {
+    return { yOutOfRange: { value: y, min: 0, max: 24 } };
+  }
+
+  return null;
+}
 
 @Component({
   selector: 'app-delivery-form-dialog',
@@ -38,13 +61,20 @@ import { Delivery } from '../../../models/delivery.model';
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Posição (x, y)</mat-label>
-            <input matInput formControlName="customerAddress" placeholder="Ex: (15, 20)">
+            <input matInput formControlName="customerAddress" placeholder="Ex: (15, 20)" (blur)="formatCoordinates($event)">
             <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('required')">
               Posição é obrigatória
             </mat-error>
             <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('pattern')">
               Formato inválido. Use (x, y)
             </mat-error>
+            <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('xOutOfRange')">
+              Coordenada X deve estar entre 0 e 39 (range atual: 25x40)
+            </mat-error>
+            <mat-error *ngIf="deliveryForm.get('customerAddress')?.hasError('yOutOfRange')">
+              Coordenada Y deve estar entre 0 e 24 (range atual: 25x40)
+            </mat-error>
+            <mat-hint>Range válido: X (0-39), Y (0-24) - Digite números e será formatado automaticamente</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
@@ -138,7 +168,11 @@ export class DeliveryFormDialogComponent implements OnInit {
   private initForm(): void {
     this.deliveryForm = this.fb.group({
       customerName: [this.data?.customerName || '', [Validators.required]],
-      customerAddress: [this.data?.customerAddress || '', [Validators.required, Validators.pattern(/^\(-?\d+,\s*-?\d+\)$/)]],
+      customerAddress: [this.data?.customerAddress || '', [
+        Validators.required, 
+        Validators.pattern(/^\(-?\d+,\s*-?\d+\)$/),
+        coordinateRangeValidator
+      ]],
       description: [this.data?.description || '', [Validators.required]],
       weight: [this.data?.weight || null, [Validators.required, Validators.min(0.1)]],
       status: [this.data?.status || 'Pending', [Validators.required]],
@@ -167,5 +201,28 @@ export class DeliveryFormDialogComponent implements OnInit {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  // Helper para formatar coordenadas
+  formatCoordinates(event: any): void {
+    let value = event.target.value;
+    
+    // Remover caracteres não numéricos exceto parênteses, vírgula e espaços
+    value = value.replace(/[^0-9(),\s-]/g, '');
+    
+    // Tentar extrair números
+    const numbers = value.match(/-?\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const x = parseInt(numbers[0]);
+      const y = parseInt(numbers[1]);
+      
+      // Aplicar limites
+      const limitedX = Math.max(0, Math.min(39, x));
+      const limitedY = Math.max(0, Math.min(24, y));
+      
+      // Formatar
+      const formattedValue = `(${limitedX}, ${limitedY})`;
+      this.deliveryForm.patchValue({ customerAddress: formattedValue });
+    }
   }
 } 

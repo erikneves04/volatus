@@ -96,7 +96,11 @@ public class DroneServices : IDroneServices
             SerialNumber = drone.SerialNumber,
             Status = drone.Status,
             BatteryLevel = (int) drone.CurrentBattery,
-            LastUpdate = drone.UpdatedAt
+            LastUpdate = drone.UpdatedAt,
+            CurrentX = drone.CurrentX,
+            CurrentY = drone.CurrentY,
+            TargetX = drone.TargetX,
+            TargetY = drone.TargetY
         }).ToList();
     }
 
