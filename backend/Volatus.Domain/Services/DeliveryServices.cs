@@ -112,6 +112,44 @@ public class DeliveryServices : IDeliveryServices
         return ConvertToViewModel(Get(delivery.Id));
     }
 
+    public DashboardMetricsViewModel GetDashboardMetrics()
+    {
+        var allDeliveries = _repository.Query().ToList();
+        var completedDeliveries = allDeliveries.Where(d => d.Status == "Completed").ToList();
+        
+        var totalDeliveries = allDeliveries.Count;
+        var completedCount = completedDeliveries.Count;
+        
+        var averageDeliveryTime = 0.0;
+        if (completedCount > 0)
+        {
+            var totalTime = completedDeliveries
+                .Where(d => d.DeliveredDate.HasValue)
+                .Sum(d => (d.DeliveredDate.Value - d.CreatedAt).TotalSeconds);
+            averageDeliveryTime = totalTime / completedCount;
+        }
+        
+        var successRate = totalDeliveries > 0 ? (double)completedCount / totalDeliveries * 100 : 0;
+        
+        return new DashboardMetricsViewModel
+        {
+            TotalDeliveries = totalDeliveries,
+            CompletedDeliveries = completedCount,
+            AverageDeliveryTimeSeconds = averageDeliveryTime,
+            SuccessRate = successRate
+        };
+    }
+
+    public IEnumerable<DeliveryViewModel> GetRecentDeliveries(int count)
+    {
+        var recentDeliveries = _repository.Query()
+            .OrderByDescending(d => d.CreatedAt)
+            .Take(count)
+            .ToList();
+            
+        return recentDeliveries.Select(delivery => ConvertToViewModel(delivery)).ToList();
+    }
+
     private Delivery Get(Guid id)
     {
         return _repository

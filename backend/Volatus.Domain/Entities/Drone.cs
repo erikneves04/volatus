@@ -41,6 +41,8 @@ public class Drone : Entity
     public double Speed { get; set; } // units per time interval
     public bool IsCharging { get; set; } // Whether drone is charging at base
     public DateTime? LastMovementTime { get; set; } // Last time position was updated
+    
+
 }
 
 public class DroneConfiguration : IEntityTypeConfiguration<Drone>
@@ -66,6 +68,8 @@ public class DroneConfiguration : IEntityTypeConfiguration<Drone>
         builder.Property(drone => drone.Speed).IsRequired();
         builder.Property(drone => drone.IsCharging).IsRequired();
         builder.Property(drone => drone.LastMovementTime);
+        
+
 
         // Unique constraint for serial number
         builder.HasIndex(drone => drone.SerialNumber).IsUnique();

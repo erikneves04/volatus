@@ -86,6 +86,20 @@ public class DroneServices : IDroneServices
         _repository.Delete(drone);
     }
 
+    public IEnumerable<DroneStatusViewModel> GetDroneStatus()
+    {
+        var drones = _repository.Query().ToList();
+        return drones.Select(drone => new DroneStatusViewModel
+        {
+            Id = drone.Id,
+            Name = drone.Name,
+            SerialNumber = drone.SerialNumber,
+            Status = drone.Status,
+            BatteryLevel = (int) drone.CurrentBattery,
+            LastUpdate = drone.UpdatedAt
+        }).ToList();
+    }
+
     private bool Exists(string serialNumber)
     {
         return _repository.Query().Where(e => e.SerialNumber == serialNumber).Any();
