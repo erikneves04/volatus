@@ -1,4 +1,4 @@
-# 🚁 Volatus - Simulador de Encomendas em Drone
+# 🚁 Volatus - Sistema de Simulação de Entregas por Drone
 
 ## 📋 Visão Geral
 
@@ -24,17 +24,17 @@ O **Volatus** é um sistema completo de simulação de entregas por drone que im
 
 ## 🚀 Funcionalidades Implementadas
 
-#### 1. **Simulação de Bateria do Drone**
+### 1. **Simulação de Bateria do Drone**
 - **Consumo Dinâmico**: Bateria diminui baseada na distância percorrida
 - **Fórmula de Consumo**: `1% por unidade de distância`
 - **Recarga Automática**: Drones retornam à base quando terminam uma entrega para carregamento
 - **Taxa de Recarga**: `5% por intervalo de tempo` quando na base
 
-#### 2. **Cálculo de Tempo Total de Entrega**
+### 2. **Cálculo de Tempo Total de Entrega**
 - **Algoritmo de Distância**: Fórmula euclidiana `√((x₂-x₁)² + (y₂-y₁)²)`
 - **Velocidade dos Drones**: `1.0 unidades por intervalo de tempo`
 
-#### 3. **Seleção Inteligente de Entregas**
+### 3. **Seleção Inteligente de Entregas**
 - **Sistema de Prioridades**: Alta → Média → Baixa
 - **Algoritmo de Alocação**: Otimização baseada em:
   - Distância do drone
@@ -42,43 +42,50 @@ O **Volatus** é um sistema completo de simulação de entregas por drone que im
   - Nível de bateria
   - Prioridade da entrega
 
-#### 5. **Otimização Inteligente**
+### 4. **Otimização Inteligente**
 - **Algoritmo do Vizinho Mais Próximo**: Para roteamento otimizado
 - **Maximização de Carga**: Combinação de pacotes por viagem
 - **Eficiência de Bateria**: Seleção do drone mais adequado
 
-### ✅ APIs RESTful Bem Definidas
+## 🔌 APIs RESTful Bem Definidas
 
-#### Endpoints Principais:
+### Endpoints Principais:
+
+#### Gestão de Entregas
 ```http
-# Gestão de Entregas
 POST   /api/delivery                    # Criar nova entrega
 GET    /api/delivery                    # Listar entregas
 GET    /api/delivery/{id}               # Obter entrega específica
 PUT    /api/delivery/{id}               # Atualizar entrega
 DELETE /api/delivery/{id}               # Excluir entrega
 POST   /api/delivery/assign-drone       # Atribuir drone à entrega
+```
 
-# Gestão de Drones
+#### Gestão de Drones
+```http
 GET    /api/drone                      # Listar drones
 GET    /api/drone/{id}                 # Obter drone específico
 POST   /api/drone                      # Criar novo drone
 PUT    /api/drone/{id}                 # Atualizar drone
+```
 
-# Sistema de Trabalho (responsável por dar vida as entidaes, atualizando o sistema periódicamente)
+#### Sistema de Trabalho (Worker)
+```http
 POST   /api/worker/process-deliveries  # Processar sistema de entregas
 POST   /api/worker/allocate-deliveries # Alocar entregas
 POST   /api/worker/update-drone-positions # Atualizar posições
 POST   /api/worker/calculate-route     # Calcular rota otimizada
+```
 
-# Dashboard e Métricas
+#### Dashboard e Métricas
+```http
 GET    /api/dashboard/metrics          # Métricas gerais
 GET    /api/dashboard/drones/status    # Status dos drones
 GET    /api/dashboard/deliveries/recent # Entregas recentes
 GET    /api/dashboard/events/recent    # Eventos recentes
 ```
 
-## 🎯 Constantes e Configurações do Sistema
+## ⚙️ Configurações do Sistema
 
 ### **Velocidade e Movimento**
 - **Velocidade Padrão dos Drones**: `1.0 unidades por intervalo`
@@ -206,16 +213,15 @@ volatus/
 ├── backend/
 │   ├── Volatus.Api/           # Controllers e configuração
 │   ├── Volatus.Domain/        # Entidades e serviços
-│   ├── Volatus.Application/   # Casos de uso
 │   ├── Volatus.Data/          # Repositórios
 │   ├── Volatus.Tests/         # Testes unitários
 │   └── Dockerfile
 ├── frontend/
 │   ├── src/app/
 │   │   ├── components/        # Componentes Angular
-│   │   ├── pages/            # Páginas da aplicação
-│   │   ├── services/         # Serviços HTTP
-│   │   └── models/           # Interfaces TypeScript
+│   │   ├── pages/             # Páginas da aplicação
+│   │   ├── services/          # Serviços HTTP
+│   │   └── models/            # Interfaces TypeScript
 │   └── Dockerfile
 ├── docker-compose.yaml        # Orquestração dos serviços
 └── README.md
@@ -246,7 +252,6 @@ ConnectionStrings__DefaultConnection=Host=volatus_db;Port=5432;Database=Volatus;
 ### **1. Tratamento de Erros Robusto**
 - Validação de entrada de dados
 - Mensagens de erro claras e informativas
-- Rejeição de pacotes que ultrapassam capacidade
 
 ### **2. Dashboard Completo**
 - Visualização em tempo real
@@ -257,7 +262,7 @@ ConnectionStrings__DefaultConnection=Host=volatus_db;Port=5432;Database=Volatus;
 ### **3. Funcionalidades Criativas**
 - **Recarga Automática**: Drones voltam à base quando bateria baixa
 - **Feedback em Tempo Real**: Status atualizado constantemente
-- **Otimização Inteligente**: Algoritmos de roteamento avançados
+- **Otimização Inteligente**: Algoritmos de roteamento
 
 ### **4. Simulação Orientada a Eventos**
 - Estados bem definidos para drones
@@ -270,12 +275,33 @@ ConnectionStrings__DefaultConnection=Host=volatus_db;Port=5432;Database=Volatus;
 - **Algoritmo do Vizinho Mais Próximo**: Para roteamento eficiente
 - **Alocação Inteligente**: Seleção otimizada de drones
 - **Processamento Assíncrono**: Operações não-bloqueantes
-- **Cache de Dados**: Redução de consultas ao banco
 
 ### **Monitoramento**
 - Logs detalhados de operações
 - Métricas de performance
 - Dashboard de monitoramento em tempo real
+
+## 🛠️ Ferramentas de Desenvolvimento
+
+### **Cursor AI - Aceleração de Desenvolvimento**
+
+Este projeto foi desenvolvido com o auxílio do **Cursor AI**, uma ferramenta de desenvolvimento inteligente que acelerou significativamente o processo de criação e correção de código. O Cursor foi utilizado para:
+
+#### **Aceleração de Desenvolvimento**
+- **Geração de Código Inteligente**: Criação rápida de controllers, serviços e componentes
+- **Refatoração Automática**: Melhoria contínua da estrutura do código
+- **Debugging Inteligente**: Identificação e correção rápida de bugs
+
+#### **Correções e Melhorias**
+- **Análise de Código**: Detecção de problemas de performance e segurança
+- **Otimização de Algoritmos**: Melhoria dos algoritmos de roteamento e alocação
+- **Testes Automatizados**: Geração de testes unitários abrangentes
+
+#### **Benefícios Alcançados**
+- **Redução no tempo de desenvolvimento**
+- **Implementação mais rápida de funcionalidades complexas**
+
+O uso do Cursor AI é uma ferramenta promissora para acelerar o desenvolvimento de código, mas é importante guiar e validar os resultados gerados.
 
 ## 📄 Licença
 
@@ -283,4 +309,4 @@ Este projeto foi desenvolvido como parte de um desafio técnico e está disponí
 
 ---
 
-**Desenvolvido usando .NET 9, Angular 19 e Docker**
+**Desenvolvido usando .NET 9, Angular 19, Docker e Cursor AI**
