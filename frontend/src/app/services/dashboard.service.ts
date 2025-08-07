@@ -12,6 +12,15 @@ export interface DashboardMetrics {
   completedDeliveries: number;
   averageDeliveryTimeSeconds: number;
   successRate: number;
+  mostEfficientDrone?: MostEfficientDrone;
+}
+
+export interface MostEfficientDrone {
+  id: string;
+  name: string;
+  serialNumber: string;
+  completedDeliveries: number;
+  efficiencyRate: number;
 }
 
 export interface DroneStatus {

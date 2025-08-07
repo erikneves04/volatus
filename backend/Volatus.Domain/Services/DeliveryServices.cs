@@ -124,12 +124,55 @@ public class DeliveryServices : IDeliveryServices
         
         var successRate = totalDeliveries > 0 ? (double)completedCount / totalDeliveries * 100 : 0;
         
+        // Calculate most efficient drone
+        var mostEfficientDrone = GetMostEfficientDrone();
+        
         return new DashboardMetricsViewModel
         {
             TotalDeliveries = totalDeliveries,
             CompletedDeliveries = completedCount,
             AverageDeliveryTimeSeconds = averageDeliveryTime,
-            SuccessRate = successRate
+            SuccessRate = successRate,
+            MostEfficientDrone = mostEfficientDrone
+        };
+    }
+
+    private MostEfficientDroneViewModel? GetMostEfficientDrone()
+    {
+        var droneDeliveries = _repository.Query()
+            .Where(d => d.DroneId.HasValue && d.Status == "Entregue")
+            .GroupBy(d => d.DroneId)
+            .Select(g => new
+            {
+                DroneId = g.Key,
+                CompletedDeliveries = g.Count(),
+                TotalDeliveries = _repository.Query().Count(d => d.DroneId == g.Key)
+            })
+            .ToList();
+
+        if (!droneDeliveries.Any())
+            return null;
+
+        var mostEfficient = droneDeliveries
+            .OrderByDescending(d => d.CompletedDeliveries)
+            .ThenByDescending(d => (double)d.CompletedDeliveries / d.TotalDeliveries)
+            .First();
+
+        var drone = _droneRepository.Query().FirstOrDefault(d => d.Id == mostEfficient.DroneId);
+        if (drone == null)
+            return null;
+
+        var efficiencyRate = mostEfficient.TotalDeliveries > 0 
+            ? (double)mostEfficient.CompletedDeliveries / mostEfficient.TotalDeliveries * 100 
+            : 0;
+
+        return new MostEfficientDroneViewModel
+        {
+            Id = drone.Id,
+            Name = drone.Name,
+            SerialNumber = drone.SerialNumber,
+            CompletedDeliveries = mostEfficient.CompletedDeliveries,
+            EfficiencyRate = efficiencyRate
         };
     }
 

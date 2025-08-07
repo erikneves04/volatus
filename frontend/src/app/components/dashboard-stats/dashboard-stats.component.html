@@ -73,6 +73,21 @@
         </div>
       </mat-card-content>
     </mat-card>
+
+    <mat-card class="metric-card" *ngIf="metrics.mostEfficientDrone">
+      <mat-card-content>
+        <div class="metric-item">
+          <div class="metric-icon success">
+            <mat-icon>star</mat-icon>
+          </div>
+          <div class="metric-content">
+            <h3>{{ metrics.mostEfficientDrone.name }}</h3>
+            <p>Drone Mais Eficiente</p>
+            <small>{{ metrics.mostEfficientDrone.completedDeliveries }} entregas</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
   <!-- Conteúdo principal -->
