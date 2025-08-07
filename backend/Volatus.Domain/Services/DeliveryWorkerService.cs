@@ -196,6 +196,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
     private Drone? FindBestDroneForDelivery(Delivery delivery, List<Drone> availableDrones)
     {
         var suitableDrones = availableDrones.Where(d => 
+            d.Status == "Disponível" &&
             d.MaxWeight >= delivery.Weight &&
             HasSufficientBatteryForDelivery(d, delivery)
         ).ToList();
@@ -204,7 +205,7 @@ public class DeliveryWorkerService : IDeliveryWorkerService
 
         // Find drone with best battery level and capacity
         return suitableDrones.OrderByDescending(d => d.CurrentBattery)
-                           .ThenByDescending(d => d.MaxWeight)
+                           .ThenBy(d => d.MaxWeight)
                            .FirstOrDefault();
     }
 

@@ -12,7 +12,7 @@ public class DeliveryBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<DeliveryBackgroundService> _logger;
-    private readonly TimeSpan _interval = TimeSpan.FromSeconds(30); // Increased interval to reduce load
+    private readonly TimeSpan _interval = TimeSpan.FromSeconds(3);
 
     public DeliveryBackgroundService(
         IServiceProvider serviceProvider,
