@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: volatus_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-Volatus_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Volatus_pwd}
+      POSTGRES_DB: ${POSTGRES_DB:-Volatus}
+      PGDATA: /data/postgres
+    volumes:
+      - db_data:/data/postgres
+    networks:
+      - volatus-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-Volatus_user}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  api:
+    container_name: volatus_api
+    build: ./backend
+    ports:
+      - "8081:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Host=volatus_db;Port=5432;Database=${POSTGRES_DB:-Volatus};Username=${POSTGRES_USER:-Volatus_user};Password=${POSTGRES_PASSWORD:-Volatus_pwd}
+      - ASPNETCORE_ENVIRONMENT=Production
+    networks:
+      - volatus-network
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  web:
+    container_name: volatus_web
+    build: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      - volatus-network
+    depends_on:
+      - api
+    restart: unless-stopped
+
+networks:
+  volatus-network:
+    driver: bridge
+
+volumes:
+  db_data:

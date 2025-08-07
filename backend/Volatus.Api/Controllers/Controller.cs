@@ -7,8 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Volatus.Api.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class Controller : ControllerBase
 {
+    [HttpGet("health")]
+    public IActionResult Health()
+    {
+        return Ok(new { 
+            status = "healthy", 
+            timestamp = DateTime.UtcNow,
+            version = "1.0.0"
+        });
+    }
+
     [NonAction]
     protected ActionResult<Response<ObjectType>> BuildResponse<ObjectType>(ObjectType content, PaginationParams @params,int statusCode, List<string> messages = null)
         where ObjectType : class
