@@ -12,7 +12,7 @@ namespace Volatus.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize("PermissionManager")]
-public class PermissionController : Controller
+public class PermissionController : BaseController
 {
     private readonly IPermissionServices _services;
 

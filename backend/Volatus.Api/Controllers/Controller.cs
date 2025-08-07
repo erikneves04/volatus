@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Volatus.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class Controller : ControllerBase
+[Route("api/base")]
+public class BaseController : ControllerBase
 {
     [HttpGet("health")]
     public IActionResult Health()

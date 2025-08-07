@@ -13,7 +13,7 @@ namespace Volatus.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
-public class EventController : Controller
+public class EventController : BaseController
 {
     private readonly IEventServices _services;
 

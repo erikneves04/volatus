@@ -12,7 +12,7 @@ public class DeliveryBackgroundService : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<DeliveryBackgroundService> _logger;
-    private readonly TimeSpan _interval = TimeSpan.FromSeconds(5); // Run every 5 seconds
+    private readonly TimeSpan _interval = TimeSpan.FromSeconds(30); // Increased interval to reduce load
 
     public DeliveryBackgroundService(
         IServiceProvider serviceProvider,
@@ -37,12 +37,25 @@ public class DeliveryBackgroundService : BackgroundService
                     _logger.LogInformation($"Delivery worker executed: {result}");
                 }
             }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("Delivery Background Service is stopping");
+                break;
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error executing delivery worker");
+                // Don't re-throw the exception to prevent the service from stopping
             }
 
-            await Task.Delay(_interval, stoppingToken);
+            try
+            {
+                await Task.Delay(_interval, stoppingToken);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
         }
 
         _logger.LogInformation("Delivery Background Service stopped");

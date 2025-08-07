@@ -13,7 +13,7 @@ namespace Volatus.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
-public class DeliveryController : Controller
+public class DeliveryController : BaseController
 {
     private readonly IDeliveryServices _services;
 

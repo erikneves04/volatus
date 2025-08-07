@@ -23,6 +23,15 @@ IServiceCollection services = builder.Services;
 IConfiguration configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 
+// Configure background service exception behavior
+builder.Host.ConfigureServices(services =>
+{
+    services.Configure<HostOptions>(options =>
+    {
+        options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+    });
+});
+
 // services
 services.AddScoped<IUserRepository, UserRepository>();
 services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
@@ -81,9 +90,16 @@ if (app.Environment.IsDevelopment())
 
 // Migrating database
 Console.WriteLine("Migrating database...");
-using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
-Console.WriteLine("Database migrated successfully");
+try
+{
+    using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+    Console.WriteLine("Database migrated successfully");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error migrating database: {ex.Message}");
+}
 
 app.MapGet("/", () =>
 {

@@ -14,7 +14,7 @@ namespace Volatus.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class UserController : Controller
+public class UserController : BaseController
 {
     private readonly IUserServices _services;
     private readonly IAuthenticationServices _authenticationServices;
