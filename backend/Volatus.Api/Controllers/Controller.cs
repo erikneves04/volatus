@@ -1,6 +1,7 @@
 using Volatus.Api.Response;
 using Volatus.Domain.Enums;
 using Volatus.Domain.View;
+using System;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Mvc;

@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { AppSettings, defaults } from '../config';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CoreService {
     private apiUrl: string;
+    private optionsSignal = signal<AppSettings>(defaults);
 
     constructor(private http: HttpClient) {
         // Use environment variable or default to localhost

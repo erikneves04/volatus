@@ -5,6 +5,7 @@ COPY *.sln .
 COPY Volatus.Api/*.csproj ./Volatus.Api/
 COPY Volatus.Domain/*.csproj ./Volatus.Domain/
 COPY Volatus.Data/*.csproj ./Volatus.Data/
+COPY Volatus.Tests/*.csproj ./Volatus.Tests/
 
 RUN dotnet restore
 COPY . .
